@@ -1,0 +1,13 @@
+{
+  "name": "@workshop/components",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "echo build components",
+    "test": "jest --passWithNoTests"
+  },
+  "dependencies": {
+    "@workshop/common": "^0.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}
