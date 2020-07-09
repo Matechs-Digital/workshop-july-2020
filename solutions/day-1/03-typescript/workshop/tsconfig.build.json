@@ -6,11 +6,7 @@
       "@workshop/common": ["packages/common/esm"],
       "@workshop/common/*": ["packages/common/esm/*"],
       "@workshop/components": ["packages/components/esm"],
-      "@workshop/components/*": ["packages/components/esm/*"],
-      "@workshop/app": ["packages/app/esm"],
-      "@workshop/app/*": ["packages/app/esm/*"]
+      "@workshop/components/*": ["packages/components/esm/*"]
     }
-  },
-  "include": ["packages/**/**/*.ts", "packages/**/**/*.tsx"],
-  "exclude": ["node_modules", "packages/**/node_modules"]
+  }
 }

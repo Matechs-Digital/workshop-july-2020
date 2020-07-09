@@ -1,1 +1,1 @@
-Solutions for typescript.
+Solutions for day-1/03-typescript.

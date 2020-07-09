@@ -4,5 +4,7 @@
     "noEmit": true,
     "skipLibCheck": true,
     "moduleResolution": "node"
-  }
+  },
+  "include": ["packages/**/**/*.ts", "packages/**/**/*.tsx"],
+  "exclude": ["node_modules", "packages/**/node_modules"]
 }

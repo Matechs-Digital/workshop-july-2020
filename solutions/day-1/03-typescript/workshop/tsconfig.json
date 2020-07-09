@@ -6,11 +6,7 @@
       "@workshop/common": ["packages/common/src"],
       "@workshop/common/*": ["packages/common/src/*"],
       "@workshop/components": ["packages/components/src"],
-      "@workshop/components/*": ["packages/components/src/*"],
-      "@workshop/app": ["packages/app/src"],
-      "@workshop/app/*": ["packages/app/src/*"]
+      "@workshop/components/*": ["packages/components/src/*"]
     }
-  },
-  "include": ["packages/**/**/*.ts", "packages/**/**/*.tsx"],
-  "exclude": ["node_modules", "packages/**/node_modules"]
+  }
 }
