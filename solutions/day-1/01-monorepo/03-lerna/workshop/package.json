@@ -1,0 +1,17 @@
+{
+  "name": "workshop",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf ./node_modules && rm -rf ./packages/*/node_modules",
+    "bootstrap": "lerna bootstrap",
+    "start:app": "lerna run --scope @workshop/app start"
+  },
+  "dependencies": {
+    "lerna": "^3.22.1"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  }
+}
