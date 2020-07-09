@@ -1,0 +1,14 @@
+{
+  "name": "@workshop/app",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "node index.js",
+    "build": "echo build app"
+  },
+  "dependencies": {
+    "@workshop/common": "^0.0.0",
+    "@workshop/components": "^0.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}
