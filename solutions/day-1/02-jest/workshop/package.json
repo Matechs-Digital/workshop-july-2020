@@ -10,7 +10,9 @@
     "start:app": "lerna run --scope @workshop/app start",
     "build": "ultra -r --build build",
     "test": "ultra -r test",
-    "test:coverage": "ultra -r test --coverage"
+    "test:coverage": "ultra -r test --coverage",
+    "test:summary": "./scripts/summary.sh",
+    "test:all": "yarn test:coverage && yarn test:summary"
   },
   "dependencies": {
     "lerna": "^3.22.1"
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "jest": "^26.1.0",
+    "nyc": "^15.1.0",
     "ultra-runner": "^3.5.0"
   }
 }
