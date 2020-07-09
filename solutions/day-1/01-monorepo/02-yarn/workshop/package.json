@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "clean": "rm -rf ./node_modules && rm -rf ./packages/*/node_modules"
+    "clean": "rm -rf ./node_modules && rm -rf ./packages/*/node_modules",
+    "clean:npm": "rm -rf ./package-lock.json && rm -rf ./packages/*/package-lock.json",
+    "clean:yarn": "rm -rf ./yarn.lock && rm -rf ./packages/*/yarn.lock"
   },
   "workspaces": {
     "packages": [
