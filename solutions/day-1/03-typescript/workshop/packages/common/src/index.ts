@@ -1,3 +1,1 @@
-export default {
-  module: "common-ts",
-};
+export const moduleName = "@workshop/common";

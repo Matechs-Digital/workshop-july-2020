@@ -1,6 +1,5 @@
 import * as common from "@workshop/common";
 
-export default {
-  module: "components-ts",
-  common,
-};
+export const moduleName = "@workshop/components";
+
+export const commonModuleName = common.moduleName;
