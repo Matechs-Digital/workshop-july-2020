@@ -1,126 +1,158 @@
 import { pipe } from "../utils/pipe";
 
-export interface Left<E> {
-  _tag: "Left";
-  e: E;
-}
-
-export interface Right<A> {
-  _tag: "Right";
+export interface Success<A> {
+  _tag: "Success";
   a: A;
 }
 
-export type Either<E, A> = Left<E> | Right<A>;
-
-export interface Task<E, A> {
-  (): Promise<Either<E, A>>;
+export interface Failure<E> {
+  _tag: "Failure";
+  e: E;
 }
 
-export const left = <E>(e: E): Either<E, never> => ({
-  _tag: "Left",
+export interface Interrupt {
+  _tag: "Interrupt";
+}
+
+export type Rejection<E> = Failure<E> | Interrupt;
+
+export type Exit<E, A> = Rejection<E> | Success<A>;
+
+export class InterruptiblePromise<E, A> {
+  readonly _E!: () => E;
+  private rejection: ((e: any) => void) | undefined = undefined;
+
+  private interrupted = false;
+
+  constructor(readonly f: () => Promise<A>) {}
+
+  readonly promise: () => Promise<A> = () =>
+    new Promise((res, rej) => {
+      this.rejection = rej;
+      this.f()
+        .then((a) => {
+          if (!this.interrupted) {
+            res(a);
+          }
+        })
+        .catch((e) => {
+          if (!this.interrupted) {
+            rej(e);
+          }
+        });
+    });
+
+  readonly interrupt = () => {
+    if (!this.interrupted && this.rejection) {
+      this.interrupted = true;
+      this.rejection?.(interrupt);
+    }
+  };
+}
+
+export interface Task<E, A> {
+  (): InterruptiblePromise<E, A>;
+}
+
+export const failure = <E>(e: E): Rejection<E> => ({
+  _tag: "Failure",
   e,
 });
 
-export const right = <A>(a: A): Either<never, A> => ({
-  _tag: "Right",
+export const interrupt: Exit<never, never> = {
+  _tag: "Interrupt",
+};
+
+export const success = <A>(a: A): Exit<never, A> => ({
+  _tag: "Success",
   a,
 });
 
 export const chain = <A, EA, B, EB>(f: (_: A) => Task<EB, B>) => (
   self: Task<EA, A>
 ): Task<EA | EB, B> => () =>
-  self().then(
-    (a): Promise<Either<EA | EB, B>> => {
-      switch (a._tag) {
-        case "Left": {
-          return Promise.resolve(a);
-        }
-        case "Right": {
-          return f(a.a)();
-        }
-      }
-    }
+  new InterruptiblePromise(() =>
+    self()
+      .promise()
+      .then((a) => f(a)().promise())
+  );
+
+export const tap = <A, EA, B, EB>(f: (_: A) => Task<EB, B>) => (
+  self: Task<EA, A>
+): Task<EA | EB, A> => () =>
+  new InterruptiblePromise(() =>
+    self()
+      .promise()
+      .then((a) =>
+        f(a)()
+          .promise()
+          .then(() => a)
+      )
   );
 
 export const map = <A, B>(f: (_: A) => B) => <E>(
   self: Task<E, A>
 ): Task<E, B> => () =>
-  self().then(
-    (a): Promise<Either<E, B>> => {
-      switch (a._tag) {
-        case "Left": {
-          return Promise.resolve(a);
-        }
-        case "Right": {
-          return Promise.resolve({
-            _tag: "Right",
-            a: f(a.a),
-          });
-        }
-      }
-    }
+  new InterruptiblePromise(() =>
+    self()
+      .promise()
+      .then((a) => f(a))
   );
 
-export const success = <A>(a: A): Task<never, A> => () =>
-  Promise.resolve({
-    _tag: "Right",
-    a,
-  });
+export const sync = <A>(f: () => A): Task<never, A> => () =>
+  new InterruptiblePromise(() => Promise.resolve(f()));
+
+export const succeed = <A>(a: A): Task<never, A> => () =>
+  new InterruptiblePromise(() => Promise.resolve(a));
 
 export const fail = <E>(e: E): Task<E, never> => () =>
-  Promise.resolve({
-    _tag: "Left",
-    e,
-  });
+  new InterruptiblePromise(() =>
+    Promise.reject({
+      _tag: "Failure",
+      e,
+    })
+  );
 
 export const fromPromise = <E>(onError: (u: unknown) => E) => <A>(
   p: () => Promise<A>
 ): Task<E, A> => () =>
-  p()
-    .then(
-      (a): Either<E, A> => ({
-        _tag: "Right",
-        a,
-      })
-    )
-    .catch((e) => Promise.resolve({ _tag: "Left", e: onError(e) }));
+  new InterruptiblePromise(() =>
+    p().catch((e) => Promise.reject({ _tag: "Failure", e: onError(e) }))
+  );
 
 export const fromTryCatch = <E>(onError: (u: unknown) => E) => <A>(
   p: () => A
 ): Task<E, A> => {
-  return () => {
-    try {
-      return success(p())();
-    } catch (e) {
-      return fail(onError(e))();
-    }
-  };
+  return () =>
+    new InterruptiblePromise(() => {
+      try {
+        return Promise.resolve(p());
+      } catch (e) {
+        return Promise.reject(failure(onError(e)));
+      }
+    });
 };
 
 export const fromNonFailingPromise = <A>(
   p: () => Promise<A>
-): Task<never, A> => () =>
-  p().then(
-    (a): Either<never, A> => ({
-      _tag: "Right",
-      a,
-    })
-  );
+): Task<never, A> => () => new InterruptiblePromise(p);
 
 export const handle = <E = never, E1 = never, B = unknown>(
   f: (e: E) => Task<E1, B>
 ) => <A>(self: Task<E, A>): Task<E1, A | B> => () =>
-  self().then(
-    (r): Promise<Either<E1, A | B>> => {
-      switch (r._tag) {
-        case "Left": {
-          return f(r.e)();
+  new InterruptiblePromise(() =>
+    self()
+      .promise()
+      .catch((e: Rejection<E>) => {
+        switch (e._tag) {
+          case "Failure": {
+            return f(e.e)().promise();
+          }
+          case "Interrupt": {
+            return Promise.reject(e);
+          }
         }
-        case "Right": {
-          return Promise.resolve(r);
-        }
-      }
-    }
+      })
   );
 
 export function sequence<Tasks extends Task<any, any>[]>(
@@ -136,66 +168,39 @@ export function sequence<Tasks extends Task<any, any>[]>(
 
 export function all<E, A>(a: Task<E, A>[]): Task<E, A[]> {
   return () =>
-    Promise.all(a.map((p) => p())).then(
-      (res): Promise<Either<E, A[]>> => {
-        const results = [] as A[];
-        const errors = [] as E[];
-
-        res.forEach((r) => {
-          switch (r._tag) {
-            case "Left": {
-              errors.push(r.e);
-              break;
-            }
-            case "Right": {
-              results.push(r.a);
-              break;
-            }
-          }
-        });
-
-        if (errors.length > 0) {
-          return Promise.resolve({
-            _tag: "Left",
-            e: errors[0],
-          });
-        }
-
-        return Promise.resolve({
-          _tag: "Right",
-          a: results,
-        });
-      }
-    );
+    new InterruptiblePromise(() => Promise.all(a.map((p) => p().promise())));
 }
 
 export const fold = <A, E, E1, A1, E2, A2>(
   f: (e: E) => Task<E1, A1>,
   g: (a: A) => Task<E2, A2>
 ) => (self: Task<E, A>): Task<E1 | E2, A1 | A2> => () =>
-  self().then(
-    (r): Promise<Either<E1 | E2, A1 | A2>> => {
-      switch (r._tag) {
-        case "Left": {
-          return f(r.e)();
+  new InterruptiblePromise(() =>
+    self()
+      .promise()
+      .then((a) => g(a)().promise())
+      .catch((e: Rejection<E>) => {
+        switch (e._tag) {
+          case "Failure": {
+            return f(e.e)().promise();
+          }
+          case "Interrupt": {
+            return Promise.reject(e);
+          }
         }
-        case "Right": {
-          return g(r.a)();
-        }
-      }
-    }
+      })
   );
 
-export const result = <E, A>(task: Task<E, A>): Task<never, Either<E, A>> =>
+export const result = <E, A>(task: Task<E, A>): Task<never, Exit<E, A>> =>
   pipe(
     task,
     fold(
-      (e) => success(left(e)),
-      (a) => success(right(a))
+      (e) => succeed(failure(e)),
+      (a) => succeed(success(a))
     )
   );
 
-export const of = success({});
+export const of = succeed({});
 
 export const bind = <K extends string>(k: K) => <S, E1, A1>(
   f: (s: S) => Task<E1, A1>
@@ -211,24 +216,18 @@ export const bind = <K extends string>(k: K) => <S, E1, A1>(
   );
 
 export const fromCallback = <E = never, A = unknown>(
-  f: (cb: (res: Either<E, A>) => void) => void
-): Task<E, A> => () =>
-  new Promise<Either<E, A>>((res) => {
-    f((result) => {
-      res(result);
-    });
-  });
-
-export const fromPromiseCallback = <E = never, A = unknown>(
   f: (resolve: (res: A) => void, reject: (error: E) => void) => void
 ): Task<E, A> => () =>
-  new Promise<Either<E, A>>((res) => {
-    f(
-      (result) => {
-        res(right(result));
-      },
-      (err) => {
-        res(left(err));
-      }
-    );
-  });
+  new InterruptiblePromise(
+    () =>
+      new Promise<A>((res, rej) => {
+        f(
+          (result) => {
+            res(result);
+          },
+          (err) => {
+            rej(failure(err));
+          }
+        );
+      })
+  );

@@ -1,6 +1,6 @@
 import * as T from "../task";
 import { pipe } from "../utils/pipe";
-import * as R from "../task/run";
+import { getTracingContext } from "../task/tracing";
 
 async function computation() {
   return await pipe(
@@ -17,7 +17,7 @@ async function computation() {
     T.chain(() => T.fail("error")),
     T.handle((e) => {
       if (e.length > 2) {
-        return T.success("handled");
+        return T.succeed("handled");
       } else {
         return T.fail(0);
       }
@@ -35,71 +35,44 @@ async function computation() {
   );
 }
 
-const computation2 = () =>
-  pipe(
-    T.of,
-    T.bind("a")(() => T.success(1)),
-    T.bind("b")(() => T.success(2)),
-    T.bind("c")(({ a, b }) => T.success(a + b)),
-    T.map((s) => s.c),
-    T.safeRun
-  );
-
-function getTracingContext() {
-  const spies = [] as jest.SpyInstance<unknown>[];
-
-  function newContext() {
-    const original = R.run;
-    const spy = jest.spyOn(R, "run");
-    const running = new Set<Promise<any>>();
-    const responses = jest.fn<void, [T.Either<unknown, unknown>]>();
-
-    spies.push(spy);
-
-    spy.mockImplementation(async (task) => {
-      const p = original(task);
-      running.add(p);
-      const r = await p;
-      running.delete(p);
-      responses(r);
-      return r;
-    });
-
-    return {
-      waitRunning: () => Promise.all(Array.from(running)),
-      responses,
-    };
-  }
-
-  afterEach(() => {
-    const clean = spies.splice(0, spies.length);
-
-    clean.forEach((spy) => {
-      spy.mockRestore();
-    });
-  });
-
-  return {
-    newContext,
-  };
-}
+const computation2 = pipe(
+  T.of,
+  T.tap(() =>
+    T.fromNonFailingPromise(
+      () =>
+        new Promise<number>((res) => {
+          setTimeout(() => {
+            res(1);
+          }, 1000);
+        })
+    )
+  ),
+  T.bind("a")(() => T.succeed(1)),
+  T.bind("b")(() => T.succeed(2)),
+  T.bind("c")(({ a, b }) => T.succeed(a + b)),
+  T.bind("all")(({ a, b, c }) =>
+    T.sequence(T.succeed(a), T.succeed(b), T.succeed(c))
+  ),
+  T.map((s) => s.all),
+  T.runAsync
+);
 
 const TC = getTracingContext();
 
 describe("03-track-async", () => {
   it("should track execution", async () => {
-    const { waitRunning, responses } = TC.newContext();
+    const { waitRunning, responses } = TC.newTestContext();
 
     // this might be triggered by a running component
     computation();
 
     await waitRunning();
     expect(responses).toHaveBeenCalledTimes(1);
-    expect(responses).toHaveBeenCalledWith(T.left("final"));
+    expect(responses).toHaveBeenCalledWith(T.failure("final"));
   });
 
   it("should track execution of multiple computations", async () => {
-    const { waitRunning, responses } = TC.newContext();
+    const { waitRunning, responses } = TC.newTestContext();
 
     // this might be triggered by a running component
     computation();
@@ -107,7 +80,22 @@ describe("03-track-async", () => {
 
     await waitRunning();
     expect(responses).toHaveBeenCalledTimes(2);
-    expect(responses).toHaveBeenNthCalledWith(1, T.right(3));
-    expect(responses).toHaveBeenNthCalledWith(2, T.left("final"));
+    expect(responses).toHaveBeenNthCalledWith(2, T.success([1, 2, 3]));
+    expect(responses).toHaveBeenNthCalledWith(1, T.failure("final"));
+  });
+
+  it("should interrupt", async () => {
+    const { waitRunning, responses } = TC.newTestContext();
+
+    // this might be triggered by a running component
+    const cancel = computation2();
+
+    setTimeout(() => {
+      cancel();
+    }, 100);
+
+    await waitRunning();
+    expect(responses).toHaveBeenCalledTimes(1);
+    expect(responses).toHaveBeenNthCalledWith(1, T.interrupt);
   });
 });

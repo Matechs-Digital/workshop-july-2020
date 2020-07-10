@@ -1,37 +1,50 @@
 import * as R from "./run";
-import { Task } from "./task";
+import { Task, Exit } from "./task";
 
 export {
   Task,
   all,
   chain,
   map,
-  success,
+  succeed,
   sequence,
-  Either,
-  Left,
-  Right,
+  Exit,
+  Success,
   fail,
   fromPromise,
   fromNonFailingPromise,
   fromTryCatch,
   handle,
   fold,
-  left,
-  right,
+  success,
   bind,
   of,
   result,
+  Failure,
+  Interrupt,
+  Rejection,
+  failure,
+  fromCallback,
+  interrupt,
+  tap,
+  sync,
+  InterruptiblePromise,
 } from "./task";
 
-export const run = <E, A>(task: Task<E, A>) => R.run(task);
+export const run = <E, A>(task: Task<E, A>): Promise<Exit<E, A>> =>
+  R.runInterruptiblePromise(task());
 
-export const safeRun = <A>(task: Task<never, A>) =>
-  R.run(task).then((a) =>
-    a._tag === "Right" ? Promise.resolve(a.a) : Promise.reject(a.e)
-  );
+export const runAsync = <E, A>(task: Task<E, A>) => (
+  cb?: (e: Exit<E, A>) => void
+) => {
+  const interruptible = task();
+  const running = R.runInterruptiblePromise(interruptible);
 
-export const unsafeRun = <E, A>(task: Task<E, A>) =>
-  R.run(task).then((a) =>
-    a._tag === "Right" ? Promise.resolve(a.a) : Promise.reject(a.e)
-  );
+  running.then((e) => {
+    cb?.(e);
+  });
+
+  return () => {
+    interruptible.interrupt();
+  };
+};
