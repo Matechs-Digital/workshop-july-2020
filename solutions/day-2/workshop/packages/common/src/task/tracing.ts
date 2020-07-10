@@ -15,10 +15,16 @@ export function getTracingContext() {
     spy.mockImplementation(async (task) => {
       const p = original(task);
       running.add(p);
-      const r = await p;
-      running.delete(p);
-      responses(r);
-      return r;
+      try {
+        const r = await p;
+        responses(r);
+        return r;
+      } catch (e) {
+        responses(e);
+        throw e;
+      } finally {
+        running.delete(p);
+      }
     });
 
     return {
