@@ -209,3 +209,26 @@ export const bind = <K extends string>(k: K) => <S, E1, A1>(
       )
     )
   );
+
+export const fromCallback = <E = never, A = unknown>(
+  f: (cb: (res: Either<E, A>) => void) => void
+): Task<E, A> => () =>
+  new Promise<Either<E, A>>((res) => {
+    f((result) => {
+      res(result);
+    });
+  });
+
+export const fromPromiseCallback = <E = never, A = unknown>(
+  f: (resolve: (res: A) => void, reject: (error: E) => void) => void
+): Task<E, A> => () =>
+  new Promise<Either<E, A>>((res) => {
+    f(
+      (result) => {
+        res(right(result));
+      },
+      (err) => {
+        res(left(err));
+      }
+    );
+  });
