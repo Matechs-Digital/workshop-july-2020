@@ -231,3 +231,7 @@ export const fromCallback = <E = never, A = unknown>(
         );
       })
   );
+
+export const foreach = <A, E1, B>(f: (a: A) => Task<E1, B>) => (
+  as: Iterable<A>
+) => all(Array.from(as).map(f));

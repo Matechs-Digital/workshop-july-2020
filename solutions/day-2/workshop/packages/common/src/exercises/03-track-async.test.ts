@@ -53,6 +53,15 @@ const computation2 = pipe(
   T.bind("all")(({ a, b, c }) =>
     T.sequence(T.succeed(a), T.succeed(b), T.succeed(c))
   ),
+  T.bind("for")(() =>
+    pipe(
+      new Map<number, number>([
+        [0, 0],
+        [1, 1],
+      ]),
+      T.foreach(([a, b]) => T.succeed(a + b))
+    )
+  ),
   T.map((s) => s.all),
   T.runAsync
 );

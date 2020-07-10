@@ -29,6 +29,7 @@ export {
   tap,
   sync,
   InterruptiblePromise,
+  foreach,
 } from "./task";
 
 export const run = <E, A>(task: Task<E, A>): Promise<Exit<E, A>> =>
