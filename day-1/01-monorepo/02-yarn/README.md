@@ -10,8 +10,7 @@ Install `yarn` globally with `npm install -g yarn`, remove any `package-lock.jso
 
 ### Exercise 2
 
-Initialize each package & the root individually, you should get the same output as the npm based version with the exception
-of having `yarn.lock` in each package instead of `package-lock.json`
+Initialize each package & the root individually, you should get the same output as the npm based version with the exception of having `yarn.lock` in each package instead of `package-lock.json`
 
 ### Exercise 3
 
