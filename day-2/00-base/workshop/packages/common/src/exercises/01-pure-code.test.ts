@@ -54,30 +54,25 @@ describe("01-pure-code", () => {
   /**
    * Exercise 11
    */
-  it.todo("asserts sum(3, 2) to not be undefined");
+  it.todo("asserts makePerson create a person via structural equality");
 
   /**
    * Exercise 12
    */
-  it.todo("asserts makePerson create a person via structural equality");
+  it.todo("asserts multiplyByN(2)(5) === 10");
 
   /**
    * Exercise 13
    */
-  it.todo("asserts multiplyByN(2)(5) === 10");
+  it.todo("asserts that multiplyByN(2)(5) calls sum exactly 2 times");
 
   /**
    * Exercise 14
    */
-  it.todo("asserts that multiplyByN(2)(5) calls sum exactly 2 times");
-
-  /**
-   * Exercise 15
-   */
   it.todo("make sure any mock taken in the previous test is cleared");
 
   /**
-   * Exercise 16
+   * Exercise 15
    * Refactor the code of multiplyByN using the dependency injection pattern.
    */
   it.todo("asserts that multiplyByN(2)(5) calls sum exactly 2 times using DI");

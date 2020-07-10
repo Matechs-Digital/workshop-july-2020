@@ -80,13 +80,6 @@ describe("01-pure-code", () => {
   /**
    * Exercise 11
    */
-  it("asserts sum(3, 2) to not be undefined", () => {
-    expect(sum(3, 2)).not.toBeUndefined();
-  });
-
-  /**
-   * Exercise 12
-   */
   it("asserts makePerson create a person via structural equality", () => {
     expect(
       makePerson({
@@ -97,7 +90,7 @@ describe("01-pure-code", () => {
   });
 
   /**
-   * Exercise 13
+   * Exercise 12
    */
   it("asserts multiplyByN(2)(5) === 10", () => {
     expect(multiplyByN(2)(5)).toBe(10);
@@ -106,7 +99,7 @@ describe("01-pure-code", () => {
   const callTracker = jest.fn();
 
   /**
-   * Exercise 14
+   * Exercise 13
    */
   it("asserts that multiplyByN(2)(5) calls sum exactly 2 times", () => {
     const sum = code.sum;
@@ -120,7 +113,7 @@ describe("01-pure-code", () => {
   });
 
   /**
-   * Exercise 15
+   * Exercise 14
    */
   it("make sure any mock taken in the previous test is cleared", () => {
     expect(multiplyByN(2)(5)).toBe(10);
@@ -128,7 +121,7 @@ describe("01-pure-code", () => {
   });
 
   /**
-   * Exercise 16
+   * Exercise 15
    * Refactor the code of multiplyByN using the dependency injection pattern.
    */
   it.todo("asserts that multiplyByN(2)(5) calls sum exactly 2 times using DI");
