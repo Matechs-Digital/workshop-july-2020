@@ -1,6 +1,6 @@
 import * as T from "../task";
 import { pipe } from "../utils/pipe";
-import { getTracingContext } from "../task/tracing";
+import { newTestContext } from "../task/tracing";
 
 async function computation() {
   return await pipe(
@@ -57,11 +57,9 @@ const computation2 = pipe(
   T.runAsync
 );
 
-const TC = getTracingContext();
-
 describe("03-track-async", () => {
   it("should track execution", async () => {
-    const { waitRunning, responses } = TC.newTestContext();
+    const { waitRunning, responses } = newTestContext();
 
     // this might be triggered by a running component
     computation();
@@ -72,7 +70,7 @@ describe("03-track-async", () => {
   });
 
   it("should track execution of multiple computations", async () => {
-    const { waitRunning, responses } = TC.newTestContext();
+    const { waitRunning, responses } = newTestContext();
 
     // this might be triggered by a running component
     computation();
@@ -85,7 +83,7 @@ describe("03-track-async", () => {
   });
 
   it("should interrupt", async () => {
-    const { waitRunning, responses } = TC.newTestContext();
+    const { waitRunning, responses } = newTestContext();
 
     // this might be triggered by a running component
     const cancel = computation2();

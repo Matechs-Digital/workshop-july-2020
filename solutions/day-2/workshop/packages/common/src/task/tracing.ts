@@ -1,7 +1,7 @@
 import * as T from "../task";
 import * as R from "../task/run";
 
-export function getTracingContext() {
+function getTracingContext() {
   const spies = [] as jest.SpyInstance<unknown>[];
 
   function newTestContext() {
@@ -39,3 +39,5 @@ export function getTracingContext() {
     newTestContext,
   };
 }
+
+export const { newTestContext } = getTracingContext();
