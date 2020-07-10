@@ -52,7 +52,7 @@ function getTracingContext() {
     const original = R.run;
     const spy = jest.spyOn(R, "run");
     const running = new Set<Promise<any>>();
-    const responses = jest.fn();
+    const responses = jest.fn<void, [T.Either<unknown, unknown>]>();
 
     spies.push(spy);
 
@@ -107,7 +107,7 @@ describe("03-track-async", () => {
 
     await waitRunning();
     expect(responses).toHaveBeenCalledTimes(2);
-    expect(responses).toHaveBeenCalledWith(T.left("final"));
-    expect(responses).toHaveBeenCalledWith(T.right(3));
+    expect(responses).toHaveBeenNthCalledWith(1, T.right(3));
+    expect(responses).toHaveBeenNthCalledWith(2, T.left("final"));
   });
 });
