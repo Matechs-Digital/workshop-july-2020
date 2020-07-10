@@ -36,4 +36,11 @@ describe("02-mocking", () => {
    * Exercise 4
    */
   it.todo("asserts useKV(kv) is calling put correctly using a fake");
+
+  /**
+   * Exercise 5
+   */
+  it.todo(
+    "asserts using useMainKV() is calling put correctly using a jest spy"
+  );
 });

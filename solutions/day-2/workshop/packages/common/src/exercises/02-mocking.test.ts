@@ -1,4 +1,10 @@
 import { KeyValueStore, useKV, keyValueStore } from "./02-mocking";
+import { useMainKV } from "./02-useMainKV";
+import * as KV from "./02-mocking";
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
 describe("02-mocking", () => {
   /**
@@ -91,5 +97,31 @@ describe("02-mocking", () => {
       [1, 2],
       [0, 1],
     ]);
+  });
+
+  /**
+   * Exercise 5
+   */
+  it("asserts using useMainKV() is calling put correctly using a jest spy", () => {
+    const put = jest.fn();
+    const original = KV.keyValueStore;
+    const spy = jest.spyOn(KV, "keyValueStore");
+
+    spy.mockImplementation(() => {
+      const kv = original();
+
+      return {
+        ...kv,
+        put: (k, v) => {
+          put(k, v);
+          return kv.put(k, v);
+        },
+      };
+    });
+
+    expect(useMainKV()).toBe(3);
+    expect(put).toHaveBeenNthCalledWith(1, 0, 1);
+    expect(put).toHaveBeenNthCalledWith(2, 1, 2);
+    expect(put).toHaveBeenNthCalledWith(3, 2, 3);
   });
 });
