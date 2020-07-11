@@ -10,10 +10,10 @@ import { pipe } from "./01-pipe";
  * - Promises don't interrupt
  * - Promises are hard to track
  *
- * We didn't notice further issues because all the tests we wrote were testing the
+ * We didn't notice further issues because all the tests we were testing the
  * happy path of components or happy paths of computations.
  *
- * The key problematic, Promise don't carry type informations on the error channel.
+ * The key problematic: Promise don't carry type informations on the error channel.
  */
 
 /**
@@ -273,14 +273,7 @@ export const succeed = <A>(a: A): Task<never, A> => (is) =>
 
 // construct a Task from an error
 export const fail = <E>(e: E): Task<E, never> => (is) =>
-  new CancelablePromise(
-    () =>
-      Promise.reject({
-        _tag: "Failure",
-        e,
-      }),
-    is
-  );
+  new CancelablePromise(() => Promise.reject(failure(e)), is);
 
 // construct an empty task of {}
 // useful to combine with bind & assign
@@ -345,11 +338,13 @@ export const fromCallback = <E = never, A = void>(
 export const chain = <A, EA, B, EB>(f: (_: A) => Task<EB, B>) => (
   self: Task<EA, A>
 ): Task<EA | EB, B> => (is) =>
-  new CancelablePromise(() => {
-    const task = self(is);
-
-    return task.promise().then((a) => f(a)(is).promise());
-  }, is);
+  new CancelablePromise(
+    () =>
+      self(is)
+        .promise()
+        .then((a) => f(a)(is).promise()),
+    is
+  );
 
 // like .then in Promise when the result of f is a Promise but ignores the outout of f
 // useful for logging or doing things that should not change the result
