@@ -6,45 +6,54 @@ import { pipe } from "@workshop/common/exercises/01-pipe";
 export class LocalContext {
   // track the interruptors
   private store = new Set<() => void>();
+  private tracer = new T.Tracer();
 
   constructor() {
     this.traced = this.traced.bind(this);
     this.leave = this.leave.bind(this);
+    this.wait = this.wait.bind(this);
   }
 
   // create a traced task
   traced<E, A>(task: T.Task<E, A>): T.Task<E, A> {
     return (is) =>
-      new T.CancelablePromise(() => {
-        return new Promise((res, rej) => {
-          // runs the computation in async mode
-          const cancel = pipe(
-            task,
-            T.runAsync((ex) => {
-              setTimeout(() => {
-                // cleanup interruptor from store
-                this.store.delete(cancel);
+      new T.CancelablePromise(
+        this.tracer.traced(() => {
+          return new Promise((res, rej) => {
+            // runs the computation in async mode
+            const cancel = pipe(
+              task,
+              T.runAsync((ex) => {
+                setTimeout(() => {
+                  // cleanup interruptor from store
+                  this.store.delete(cancel);
 
-                // propagate exit
-                switch (ex._tag) {
-                  case "Success": {
-                    res(ex.a);
+                  // propagate exit
+                  switch (ex._tag) {
+                    case "Success": {
+                      res(ex.a);
+                    }
+                    case "Failure": {
+                      rej(ex);
+                    }
+                    case "Interrupt": {
+                      rej(ex);
+                    }
                   }
-                  case "Failure": {
-                    rej(ex);
-                  }
-                  case "Interrupt": {
-                    rej(ex);
-                  }
-                }
-              }, 0);
-            })
-          );
+                }, 0);
+              })
+            );
 
-          // track the interruptor
-          this.store.add(cancel);
-        });
-      }, is);
+            // track the interruptor
+            this.store.add(cancel);
+          });
+        }),
+        is
+      );
+  }
+
+  wait() {
+    return this.tracer.wait();
   }
 
   leave() {
@@ -65,7 +74,7 @@ export class LocalContext {
 export const useLocalTracer = () => {
   // keeps the context in a reference
   const {
-    current: { leave, traced },
+    current: { leave, traced, wait },
   } = React.useRef(new LocalContext());
 
   // run a task as a traced promise of the exit state
@@ -76,5 +85,6 @@ export const useLocalTracer = () => {
     leave,
     traced,
     tracedRunPromise,
+    wait,
   };
 };
