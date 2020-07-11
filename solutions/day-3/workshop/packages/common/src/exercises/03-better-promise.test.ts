@@ -227,4 +227,9 @@ describe("03-better-promise", () => {
    * Exercise 20
    */
   it.todo("test assign");
+
+  /**
+   * Exercise 21
+   */
+  it.todo("test delayed");
 });
