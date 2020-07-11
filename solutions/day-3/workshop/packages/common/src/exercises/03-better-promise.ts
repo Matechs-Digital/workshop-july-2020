@@ -123,6 +123,8 @@ export class CancelablePromise<E, A> {
   readonly promise: () => Promise<A> = () => {
     if (this.current) {
       throw new Error("Bug: promise() have been called twice");
+    } else if (this.is.interrupted) {
+      throw new Error("Bug: trying to create a promise already interrupted");
     } else {
       // we record the current interrupt in the interruption registry
       const removeListener = this.is.listen(() => {
