@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.build.json",
+  "compilerOptions": {
+    "outDir": "esm",
+    "module": "esnext",
+    "noEmit": false,
+    "sourceMap": true,
+    "declaration": true,
+    "jsx": "react"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}

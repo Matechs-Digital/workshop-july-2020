@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "noErrorTruncation": true
+  },
+  "include": ["packages/**/**/*.ts", "packages/**/**/*.tsx"],
+  "exclude": ["node_modules", "packages/**/node_modules"]
+}
