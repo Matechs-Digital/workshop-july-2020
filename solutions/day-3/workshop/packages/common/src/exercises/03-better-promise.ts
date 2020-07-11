@@ -348,19 +348,32 @@ export const chain = <A, EA, B, EB>(f: (_: A) => Task<EB, B>) => (
 
 // like .then in Promise when the result of f is a Promise but ignores the outout of f
 // useful for logging or doing things that should not change the result
-export const tap = <A, EA, B, EB>(f: (_: A) => Task<EB, B>) => (
+export const tap = <A, B, EB>(f: (_: A) => Task<EB, B>) => <EA>(
   self: Task<EA, A>
-): Task<EA | EB, A> => (is) =>
-  new CancelablePromise(
-    () =>
-      self(is)
-        .promise()
-        .then((a) =>
-          f(a)(is)
-            .promise()
-            .then(() => a)
-        ),
-    is
+): Task<EA | EB, A> =>
+  pipe(
+    self,
+    chain((a) =>
+      pipe(
+        f(a),
+        map((_) => a)
+      )
+    )
+  );
+
+// like .then in Promise when the result of f is a Promise but ignores the outout of f
+// useful for logging or doing things that should not change the result
+export const tapError = <EA, B, EB>(f: (_: EA) => Task<EB, B>) => <A>(
+  self: Task<EA, A>
+): Task<EA | EB, A> =>
+  pipe(
+    self,
+    handle((e) =>
+      pipe(
+        f(e),
+        chain((_) => fail(e))
+      )
+    )
   );
 
 // like .then in Promise when the result of f is a value
