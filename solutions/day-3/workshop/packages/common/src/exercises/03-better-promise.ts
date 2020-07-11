@@ -109,12 +109,12 @@ export class CancelablePromise<E, A> {
   ) {}
 
   readonly promise: () => Promise<A> = () => {
-    const c = this.is.listen(() => {
-      this.interrupt();
-    });
     if (this.current) {
       return this.current;
     } else {
+      const c = this.is.listen(() => {
+        this.interrupt();
+      });
       const p = new Promise<A>((res, rej) => {
         this.rejection = rej;
         this.promiseFactory()
