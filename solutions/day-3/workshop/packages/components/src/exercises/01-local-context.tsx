@@ -17,17 +17,21 @@ export class LocalContext {
           const cancel = pipe(
             task,
             T.runAsync((ex) => {
-              switch (ex._tag) {
-                case "Success": {
-                  res(ex.a);
+              setTimeout(() => {
+                this.store.delete(cancel);
+
+                switch (ex._tag) {
+                  case "Success": {
+                    res(ex.a);
+                  }
+                  case "Failure": {
+                    rej(ex);
+                  }
+                  case "Interrupt": {
+                    rej(ex);
+                  }
                 }
-                case "Failure": {
-                  rej(ex);
-                }
-                case "Interrupt": {
-                  rej(ex);
-                }
-              }
+              }, 0);
             })
           );
 

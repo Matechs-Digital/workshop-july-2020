@@ -48,6 +48,7 @@ export const AsyncCounter = () => {
 
 export const AutoIncrementAsync = () => {
   const [count, setCount] = React.useState(0);
+  const { leave, tracedRunPromise } = useLocalTracer();
 
   const increment = pipe(
     T.fromCallback<never, void>((res) => {
@@ -63,21 +64,12 @@ export const AutoIncrementAsync = () => {
   );
 
   React.useEffect(() => {
-    const interruptors = new Set<() => void>();
     const interval = setInterval(() => {
-      const cancel = pipe(
-        increment,
-        T.runAsync(() => {
-          interruptors.delete(cancel);
-        })
-      );
-      interruptors.add(cancel);
+      tracedRunPromise(increment);
     }, 500);
     return () => {
       clearInterval(interval);
-      interruptors.forEach((i) => {
-        i();
-      });
+      leave();
     };
   }, []);
 
