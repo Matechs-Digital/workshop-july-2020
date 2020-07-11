@@ -9,24 +9,20 @@ export const AsyncCounter = () => {
 
   const increment = () => {
     pipe(
-      T.sleep(1000),
-      T.chain(() =>
-        T.sync(() => {
-          setCount((current) => current + 1);
-        })
-      ),
+      T.sync(() => {
+        setCount((current) => current + 1);
+      }),
+      T.delayed(1000),
       tracedRunPromise
     );
   };
 
   const decrement = () => {
     pipe(
-      T.sleep(1000),
-      T.chain(() =>
-        T.sync(() => {
-          setCount((current) => current - 1);
-        })
-      ),
+      T.sync(() => {
+        setCount((current) => current - 1);
+      }),
+      T.delayed(1000),
       tracedRunPromise
     );
   };
