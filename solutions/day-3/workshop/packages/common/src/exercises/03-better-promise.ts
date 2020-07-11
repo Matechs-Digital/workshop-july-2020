@@ -285,7 +285,7 @@ export const fromPromise = <E>(onError: (u: unknown) => E) => <A>(
   p: () => Promise<A>
 ): Task<E, A> => (is) =>
   new CancelablePromise(
-    () => p().catch((e) => Promise.reject({ _tag: "Failure", e: onError(e) })),
+    () => p().catch((e) => Promise.reject(failure(onError(e)))),
     is
   );
 
@@ -337,14 +337,7 @@ export const fromCallback = <E = never, A = void>(
 // like .then in Promise when the inner result is a Promise
 export const chain = <A, EA, B, EB>(f: (_: A) => Task<EB, B>) => (
   self: Task<EA, A>
-): Task<EA | EB, B> => (is) =>
-  new CancelablePromise(
-    () =>
-      self(is)
-        .promise()
-        .then((a) => f(a)(is).promise()),
-    is
-  );
+): Task<EA | EB, B> => pipe(self, fold(fail, f));
 
 // like .then in Promise when the result of f is a Promise but ignores the outout of f
 // useful for logging or doing things that should not change the result
@@ -379,35 +372,16 @@ export const tapError = <EA, B, EB>(f: (_: EA) => Task<EB, B>) => <A>(
 // like .then in Promise when the result of f is a value
 export const map = <A, B>(f: (_: A) => B) => <E>(
   self: Task<E, A>
-): Task<E, B> => (is) =>
-  new CancelablePromise(
-    () =>
-      self(is)
-        .promise()
-        .then((a) => f(a)),
-    is
+): Task<E, B> =>
+  pipe(
+    self,
+    chain((a) => succeed(f(a)))
   );
 
 // like .catch in Promise
 export const handle = <E = never, E1 = never, B = unknown>(
   f: (e: E) => Task<E1, B>
-) => <A>(self: Task<E, A>): Task<E1, A | B> => (is) =>
-  new CancelablePromise(
-    () =>
-      self(is)
-        .promise()
-        .catch((e: Rejection<E>) => {
-          switch (e._tag) {
-            case "Failure": {
-              return f(e.e)(is).promise();
-            }
-            case "Interrupt": {
-              return Promise.reject(e);
-            }
-          }
-        }),
-    is
-  );
+) => <A>(self: Task<E, A>): Task<E1, A | B> => pipe(self, fold(f, succeed));
 
 // like .then + .catch
 export const fold = <A, E, E1, A1, E2, A2>(
@@ -494,7 +468,7 @@ export const assign = <K extends string>(k: K) => <S, A1>(f: (s: S) => A1) => <
 
 // sleeps
 export const sleep = (ms: number) =>
-  fromCallback<never, void>((res) => {
+  fromCallback((res: Cb<void>) => {
     setTimeout(() => {
       res();
     }, ms);
