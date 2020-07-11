@@ -18,7 +18,7 @@ describe("02-testing-hooks", () => {
    * Exercise 1:
    * with sole usage of @testing-library/react
    */
-  it("test useCounter increment updates the count correctly", () => {
+  it("assert that useCounter increments the count correctly", () => {
     const HookView = (p: {
       current: { value: ReturnType<typeof useCounter> };
     }) => {
@@ -56,7 +56,7 @@ describe("02-testing-hooks", () => {
    * Exercise 2:
    * with sole usage of @testing-library/react
    */
-  it("test useAsyncCounter increment updates the count correctly", () => {
+  it("asserts that useAsyncCounter increments the count correctly", () => {
     jest.useFakeTimers();
 
     const HookView = (p: {
@@ -97,7 +97,7 @@ describe("02-testing-hooks", () => {
    * Exercise 3:
    * without usage of fake timers
    */
-  it("test useAsyncCounter increment updates the count correctly - async tracking", async () => {
+  it("asserts that useAsyncCounter increments the count correctly - async tracking", async () => {
     const { unmount, current } = renderHook(() => useAsyncCounter(100));
 
     expect(current.value.count).toBe(0);
@@ -115,7 +115,7 @@ describe("02-testing-hooks", () => {
   /**
    * Exercise 4
    */
-  it("test useAsyncAutoIncrement asserting that it updates correctly", async () => {
+  it("asserts that useAsyncAutoIncrement updates itself correctly", async () => {
     const { unmount, current } = renderHook(() =>
       useAsyncAutoIncrement(10, 100)
     );
@@ -136,7 +136,7 @@ describe("02-testing-hooks", () => {
   /**
    * Exercise 5
    */
-  it("test useAsyncAutoIncrement asserting that by defaults updates every 5 seconds", async () => {
+  it("asserts that useAsyncAutoIncrement by defaults updates itself every 5 seconds", async () => {
     jest.useFakeTimers();
 
     const R = renderHook(() => useAsyncAutoIncrement());
@@ -202,6 +202,6 @@ describe("02-testing-hooks", () => {
    * Try to use fakeTimers with RTL
    */
   it.todo(
-    "test useAsyncAutoIncrement using renderHook from RTL defaults at 5 seconds"
+    "test useAsyncAutoIncrement using renderHook from RTL with defaults at 5 seconds"
   );
 });
