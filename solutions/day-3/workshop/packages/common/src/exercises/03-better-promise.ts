@@ -48,7 +48,7 @@ export interface Task<E, A> {
  * Models the state of interruption, allows for listening to interruption events & firing interruption events
  */
 export class InterruptionState {
-  public interrupted = false;
+  private isInterrupted = false;
   readonly listeners = new Set<() => void>();
 
   // listen to an interruption event
@@ -60,9 +60,13 @@ export class InterruptionState {
     };
   }
 
+  get interrupted() {
+    return this.isInterrupted;
+  }
+
   interrupt() {
     // set to interrupted
-    this.interrupted = true;
+    this.isInterrupted = true;
     // notify
     this.listeners.forEach((i) => {
       i();
