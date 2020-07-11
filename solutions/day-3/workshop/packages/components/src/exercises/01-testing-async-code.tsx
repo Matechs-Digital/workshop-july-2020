@@ -5,7 +5,7 @@ import { useLocalTracer } from "./01-local-context";
 
 export const AsyncCounter = () => {
   const [count, setCount] = React.useState(0);
-  const { leave, tracedRunPromise } = useLocalTracer();
+  const { tracedRunPromise } = useLocalTracer();
 
   const increment = () => {
     pipe(
@@ -27,12 +27,6 @@ export const AsyncCounter = () => {
     );
   };
 
-  React.useEffect(() => {
-    return () => {
-      leave();
-    };
-  }, []);
-
   return (
     <>
       <button onClick={() => decrement()}>-</button>
@@ -44,7 +38,7 @@ export const AsyncCounter = () => {
 
 export const AutoIncrementAsync = () => {
   const [count, setCount] = React.useState(0);
-  const { leave, tracedRunPromise } = useLocalTracer();
+  const { tracedRunPromise } = useLocalTracer();
 
   const increment = pipe(
     T.fromCallback((res: T.Cb<void>) => {
@@ -65,7 +59,6 @@ export const AutoIncrementAsync = () => {
     }, 500);
     return () => {
       clearInterval(interval);
-      leave();
     };
   }, []);
 

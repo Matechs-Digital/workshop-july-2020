@@ -81,8 +81,14 @@ export const useLocalTracer = () => {
   const tracedRunPromise = <E, A>(task: T.Task<E, A>) =>
     pipe(task, traced, T.runPromise);
 
+  // interrupt everything on unmount
+  React.useEffect(() => {
+    return () => {
+      leave();
+    };
+  }, []);
+
   return {
-    leave,
     traced,
     tracedRunPromise,
     wait,
