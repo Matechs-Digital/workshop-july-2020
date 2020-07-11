@@ -74,24 +74,21 @@ export const AutoIncrement = () => {
 export const AutoIncrementAsync = () => {
   const [count, setCount] = React.useState(0);
 
-  const increment = async (_: { cleared: boolean }) => {
+  const increment = async () => {
     await new Promise((r) => {
       setTimeout(() => {
         r();
       }, 100);
     });
-    if (!_.cleared) {
-      setCount((c) => c + 1);
-    }
+
+    setCount((c) => c + 1);
   };
 
   React.useEffect(() => {
-    const _ = { cleared: false };
     const interval = setInterval(() => {
-      increment(_);
+      increment();
     }, 5000);
     return () => {
-      _.cleared = true;
       clearInterval(interval);
     };
   }, []);
