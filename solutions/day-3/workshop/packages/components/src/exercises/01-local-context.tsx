@@ -71,14 +71,14 @@ export class LocalContext {
 }
 
 // expose a LocalContext using a react custom hook
-export const useLocalTracer = () => {
+export const useExecutor = () => {
   // keeps the context in a reference
   const {
     current: { leave, traced, wait },
   } = React.useRef(new LocalContext());
 
   // run a task as a traced promise of the exit state
-  const tracedRunPromise = <E, A>(task: T.Task<E, A>) =>
+  const runPromise = <E, A>(task: T.Task<E, A>) =>
     pipe(task, traced, T.runPromise);
 
   // interrupt everything on unmount
@@ -89,8 +89,7 @@ export const useLocalTracer = () => {
   }, []);
 
   return {
-    traced,
-    tracedRunPromise,
+    runPromise,
     wait,
   };
 };
