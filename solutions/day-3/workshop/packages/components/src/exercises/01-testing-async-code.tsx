@@ -41,16 +41,10 @@ export const AutoIncrementAsync = () => {
   const { runPromise } = useExecutor();
 
   const increment = pipe(
-    T.fromCallback((res: T.Cb<void>) => {
-      setTimeout(() => {
-        res();
-      }, 100);
+    T.sync(() => {
+      setCount((c) => c + 1);
     }),
-    T.chain(() =>
-      T.sync(() => {
-        setCount((c) => c + 1);
-      })
-    )
+    T.delayed(100)
   );
 
   React.useEffect(() => {
