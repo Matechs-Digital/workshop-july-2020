@@ -51,7 +51,7 @@ export const AutoIncrementAsync = () => {
   const { leave, tracedRunPromise } = useLocalTracer();
 
   const increment = pipe(
-    T.fromCallback<never, void>((res) => {
+    T.fromCallback((res: T.Cb<void>) => {
       setTimeout(() => {
         res();
       }, 100);

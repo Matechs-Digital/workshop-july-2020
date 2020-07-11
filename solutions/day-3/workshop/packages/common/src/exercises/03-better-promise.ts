@@ -269,7 +269,9 @@ export const fromNonFailingPromise = <A>(
   p: () => Promise<A>
 ): Task<never, A> => (is) => new CancelablePromise(p, is);
 
-export const fromCallback = <E = never, A = unknown>(
+export type Cb<A> = (a: A) => void;
+
+export const fromCallback = <E = never, A = void>(
   f: (resolve: (res: A) => void, reject: (error: E) => void) => void
 ): Task<E, A> => (is) =>
   new CancelablePromise(
