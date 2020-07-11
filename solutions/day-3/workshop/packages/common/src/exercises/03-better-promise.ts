@@ -480,3 +480,57 @@ export const delayed = (ms: number) => <E, A>(task: Task<E, A>) =>
     sleep(ms),
     chain(() => task)
   );
+
+export const onInterrupt = <E1, A1>(f: () => Task<E1, A1>) => <E, A>(
+  self: Task<E, A>
+): Task<E | E1, A> => (is) =>
+  new CancelablePromise(
+    () =>
+      self(is)
+        .promise()
+        .catch(async (e: Rejection<E>) => {
+          switch (e._tag) {
+            case "Failure": {
+              return Promise.reject(e);
+            }
+            case "Interrupt": {
+              await f()(new InterruptionState()).promise();
+
+              return await Promise.reject(failure(e));
+            }
+          }
+        }),
+    is
+  );
+
+export const fromInterruptibleCallback = <
+  E = never,
+  A = void,
+  E2 = never,
+  A2 = void
+>(
+  f: (resolve: (res: A) => void, reject: (error: E) => void) => Task<E2, A2>
+): Task<E | E2, A> => (is) => {
+  let finalizer: Task<E2, A2>;
+
+  const finalizerTask: Task<E, A> = (is: InterruptionState) =>
+    new CancelablePromise(
+      () =>
+        new Promise<A>((res, rej) => {
+          finalizer = f(
+            (result) => {
+              res(result);
+            },
+            (err) => {
+              rej(failure(err));
+            }
+          );
+        }),
+      is
+    );
+
+  return pipe(
+    finalizerTask,
+    onInterrupt(() => finalizer)
+  )(is);
+};

@@ -232,4 +232,59 @@ describe("03-better-promise", () => {
    * Exercise 21
    */
   it.todo("test delayed");
+
+  /**
+   * Exercise 22
+   */
+  it("test onInterrupt", async () => {
+    const f = jest.fn();
+    const result = await new Promise<T.Exit<never, void>>((r) => {
+      const cancel = pipe(
+        T.sleep(100),
+        T.onInterrupt(() =>
+          T.sync(() => {
+            f();
+          })
+        ),
+        T.runAsync((e) => {
+          r(e);
+        })
+      );
+
+      setTimeout(() => {
+        cancel();
+      }, 10);
+    });
+    expect(result).toEqual(T.interrupt);
+    expect(f).toHaveBeenCalledTimes(1);
+  });
+
+  /**
+   * Exercise 23
+   */
+  it("test fromInterruptibleCallback", async () => {
+    const f = jest.fn();
+    const result = await new Promise<T.Exit<never, void>>((r) => {
+      const cancel = pipe(
+        T.fromInterruptibleCallback((res: T.Cb<void>) => {
+          const timer = setTimeout(() => {
+            res();
+          }, 1000);
+          return T.sync(() => {
+            clearInterval(timer);
+            f();
+          });
+        }),
+        T.runAsync((e) => {
+          r(e);
+        })
+      );
+
+      setTimeout(() => {
+        cancel();
+      }, 10);
+    });
+    expect(result).toEqual(T.interrupt);
+    expect(f).toHaveBeenCalledTimes(1);
+  });
 });
