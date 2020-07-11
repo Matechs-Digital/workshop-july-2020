@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import React = require("react");
+import * as React from "react";
 
 class Current<T> {
   public value!: T;
