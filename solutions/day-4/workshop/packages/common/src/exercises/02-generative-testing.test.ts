@@ -9,6 +9,7 @@ import {
   arbitraryPersonWithBirthDate,
   arbitraryResult,
 } from "./02-generative-testing";
+import { defer } from "../previous/04-defer";
 
 describe("02-fast-check", () => {
   /**
@@ -107,18 +108,33 @@ describe("02-fast-check", () => {
   /**
    * Exercise 10
    */
-  it("arbitraryResult is left or right", () =>
-    fc.assert(
-      fc.property(arbitraryResult(arbitraryMinLenghtString(1)), (s) => {
-        switch (s._tag) {
-          case "Left": {
-            expect(Array.isArray(s.left)).toBe(true);
-            break;
+  it(
+    "arbitraryResult is left or right",
+    defer((after) => {
+      const f = jest.fn();
+      const g = jest.fn();
+
+      after(() => {
+        expect(f).toHaveBeenCalled();
+        expect(g).toHaveBeenCalled();
+      });
+
+      return fc.assert(
+        fc.property(arbitraryResult(arbitraryMinLenghtString(1)), (s) => {
+          switch (s._tag) {
+            case "Left": {
+              f();
+              expect(Array.isArray(s.left)).toBe(true);
+              break;
+            }
+            case "Right": {
+              g();
+              expect(s.right.length).toBeGreaterThan(0);
+              break;
+            }
           }
-          case "Right": {
-            expect(s.right.length).toBeGreaterThan(0);
-          }
-        }
-      })
-    ));
+        })
+      );
+    })
+  );
 });

@@ -310,3 +310,53 @@ export function decodeObjectWithPartials<
  */
 
 // const decode Organization = ???
+
+/**
+ * We have so far built a nice Decoder that allows generic decoding while preserving all the errors,
+ * there is only one problem, we are defining things twice:
+ * 1) we make an interface or a type representing the value we want to make a decoder of
+ * 2) we make a decoder of a generic structure that implements the interface
+ *
+ * We would like to derive the types of 1 and only write 2
+ */
+
+export type TypeOf<D extends Decoder<any>> = [D] extends [Decoder<infer A>]
+  ? A
+  : never;
+
+/**
+ * Example
+ */
+
+export const decodeNumber: Decoder<number> = (u) =>
+  typeof u === "number"
+    ? right(u)
+    : left([`cannot read a number from: ${typeof u}`]);
+
+export const walletDecoder = decodeObject({
+  id: decodeString,
+  balance: decodeNumber,
+});
+
+export interface Wallet extends TypeOf<typeof walletDecoder> {}
+
+/**
+ * Nice, only another problem left,
+ * walletDecoder has type Decoder<{ id: string; balance: number; }>
+ *
+ * we would like it to be: Decoder<Wallet>
+ */
+
+/**
+ * Trick
+ */
+export const as = <T>() => (k: Decoder<T>): Decoder<T> => k;
+
+const User_ = decodeObject({
+  id: decodeString,
+  email: decodeString,
+});
+
+export interface User extends TypeOf<typeof User_> {}
+
+export const UserDecoder = as<User>()(User_);

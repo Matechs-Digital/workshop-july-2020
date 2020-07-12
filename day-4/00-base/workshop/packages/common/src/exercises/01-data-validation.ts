@@ -51,43 +51,49 @@ export interface Right<A> {
  * Exercise 1
  */
 
-// export const left = <E>(e: E): Either<E, never>
+export declare const left: <E>(e: E) => Either<E, never>;
 
 /**
  * Exercise 2
  */
 
-// export const right = <A>(a: A): Either<never, A>
+export declare const right: <A>(a: A) => Either<never, A>;
 
 /**
  * Exercise 3
  */
 
-// export const chain = <A, B>(f: (a: A) => Result<B>) => (self: Decoder<A>): Decoder<B>
+export declare const chain: <A, B>(
+  f: (a: A) => Result<B>
+) => (self: Decoder<A>) => Decoder<B>;
 
 /**
  * Exercise 4
  */
 
-// export const map = <A, B>(f: (a: A) => B) => (self: Decoder<A>): Decoder<B>
+export declare const map: <A, B>(
+  f: (a: A) => B
+) => (self: Decoder<A>) => Decoder<B>;
 
 /**
  * Exercise 5
  */
 
-// export const decodeString: Decoder<string> = ???
+export declare const decodeString: Decoder<string>;
 
 /**
  * Exercise 6
  */
 
-// export const decodeDate: Decoder<Date> = ???
+export declare const decodeDate: Decoder<Date>;
 
 /**
  * Exercise 7: Hard
  */
 
-// export function decodeObject<O extends Record<string, Decoder<any>>>(o: O): Decoder<{ [k in keyof O]: [O[k]] extends [Decoder<infer K>] ? K : never }>
+export declare function decodeObject<O extends Record<string, Decoder<any>>>(
+  o: O
+): Decoder<{ [k in keyof O]: [O[k]] extends [Decoder<infer K>] ? K : never }>;
 
 /**
  * Model for a person
@@ -105,12 +111,12 @@ export interface PersonWithBirthDate extends Person {
  * Exercise 8
  */
 
-// export const decodePerson: Decoder<Person> = ?
+export declare const decodePerson: Decoder<Person>;
 
 /**
  * Exercise 9
  */
-// export const decodePersonWithBirthDate: Decoder<PersonWithBirthDate> = ???
+export declare const decodePersonWithBirthDate: Decoder<PersonWithBirthDate>;
 
 /**
  * Write a model for Organization
@@ -139,8 +145,7 @@ export interface Organization {
  * Exercise 8: Hard
  */
 
-/*
-export function decodeObjectWithPartials<
+export declare function decodeObjectWithPartials<
   O extends Record<string, Decoder<any>>,
   P extends Record<string, Decoder<any>>
 >(
@@ -149,13 +154,54 @@ export function decodeObjectWithPartials<
 ): Decoder<
   { [k in keyof O]: [O[k]] extends [Decoder<infer K>] ? K : never } &
     { [k in keyof O]?: [O[k]] extends [Decoder<infer K>] ? K : never }
-> {
-  return ???
-}
-*/
+>;
 
 /**
  * Exercise 9
  */
 
-// const decode Organization = ???
+export declare const decodeOrganization: Decoder<Organization>;
+
+/**
+ * We have so far built a nice Decoder that allows generic decoding while preserving all the errors,
+ * there is only one problem, we are defining things twice:
+ * 1) we make an interface or a type representing the value we want to make a decoder of
+ * 2) we make a decoder of a generic structure that implements the interface
+ *
+ * We would like to derive the types of 1 and only write 2
+ */
+
+export type TypeOf<D extends Decoder<any>> = [D] extends [Decoder<infer A>]
+  ? A
+  : never;
+
+/**
+ * Example
+ */
+
+export declare const decodeNumber: Decoder<number>;
+
+export declare const walletDecoder: Decoder<{ id: string; balance: number }>;
+
+export interface Wallet extends TypeOf<typeof walletDecoder> {}
+
+/**
+ * Nice, only another problem left,
+ * walletDecoder has type Decoder<{ id: string; balance: number; }>
+ *
+ * we would like it to be: Decoder<Wallet>
+ */
+
+/**
+ * Trick
+ */
+export const as = <T>() => (k: Decoder<T>): Decoder<T> => k;
+
+const User_ = decodeObject({
+  id: decodeString,
+  email: decodeString,
+});
+
+export interface User extends TypeOf<typeof User_> {}
+
+export const UserDecoder = as<User>()(User_);
