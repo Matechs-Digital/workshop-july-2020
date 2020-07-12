@@ -306,7 +306,7 @@ export function decodeObjectWithPartials<
 }
 
 /**
- * Exercise 9: Hard
+ * Exercise 9
  */
 
 // const decode Organization = ???
