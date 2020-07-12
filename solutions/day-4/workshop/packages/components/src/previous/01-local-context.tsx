@@ -1,6 +1,6 @@
 import * as React from "react";
-import * as T from "@workshop/common/exercises/03-better-promise";
-import { pipe } from "@workshop/common/exercises/01-pipe";
+import * as T from "@workshop/common/previous/03-better-promise";
+import { pipe } from "@workshop/common/previous/01-pipe";
 
 // tracks a set of computations running them interruptibly
 export class LocalContext {
