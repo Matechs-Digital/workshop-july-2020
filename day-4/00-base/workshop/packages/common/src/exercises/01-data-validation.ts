@@ -23,8 +23,6 @@
  * in case we do, what's the string? in case we don't what's the error?"
  */
 
-import { pipe } from "@workshop/common/previous/01-pipe";
-
 /**
  * Let's model a decoder for our data, we will encode the errors as a string[]
  */
