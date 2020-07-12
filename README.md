@@ -16,10 +16,10 @@ The material is organized by day, we start at day-1 and each directory should be
 
 ## General Infos
 
-The workshop has to be interactive, we will start with a slightly boring topic that is configuration and in that the exercises are not so exiting but for the rest you will be required to come up with solutions. Ideally for each exercise you will give it a try first before we go though it toghether to better understand the topic.
+The workshop has to be interactive, we will start with a slightly boring topic, configuration, in that exercises are not so exciting but for the rest you will be required to come up with solutions. Ideally for each exercise you will give it a try before we go though it toghether to better understand the topic.
 
 Other infos are:
 
-- We take small breaks ideally 5/10mins every hour.
-- Q&A should be interactive during the workshop, there are no planned q&a slots.
-- In in person worshops I would be able to walk by you and share a view on the screen to discuss ideas and problems, let's try to do that here too
+- We take small breaks ideally 5/10 mins every hour.
+- Q&A should be interactive during the workshop, there are no planned Q&A slots.
+- In in person worshops I would be able to walk by you and share a view on the screen to discuss ideas and problems, let's try to do that here with screen-sharing too.
