@@ -1,0 +1,14 @@
+{
+  "name": "@workshop/app",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "next dev",
+    "build": "rm -rf .next; next build",
+    "test": "jest --passWithNoTests"
+  },
+  "dependencies": {
+    "@workshop/common": "^0.0.0",
+    "@workshop/components": "^0.0.0",
+    "next": "^9.4.4"
+  }
+}

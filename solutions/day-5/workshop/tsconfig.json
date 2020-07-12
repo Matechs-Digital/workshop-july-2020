@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.commons.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@workshop/common": ["packages/common/src"],
+      "@workshop/common/*": ["packages/common/src/*"],
+      "@workshop/components": ["packages/components/src"],
+      "@workshop/components/*": ["packages/components/src/*"]
+    }
+  }
+}
