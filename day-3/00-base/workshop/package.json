@@ -1,0 +1,51 @@
+{
+  "name": "workshop",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf ./node_modules && rm -rf ./packages/*/node_modules",
+    "clean:npm": "rm -rf ./package-lock.json && rm -rf ./packages/*/package-lock.json",
+    "clean:yarn": "rm -rf ./yarn.lock && rm -rf ./packages/*/yarn.lock",
+    "clean:coverage": "rm -rf ./coverage && rm -rf ./packages/*/coverage",
+    "clean:esm": "rm -rf ./packages/*/esm",
+    "clean:ultra": "rm -rf ./packages/*/.ultra.cache.json",
+    "clean:light": "yarn clean:coverage && yarn clean:esm && yarn clean:ultra",
+    "clean:all": "yarn clean:light && yarn clean:npm && yarn clean:yarn",
+    "bootstrap": "lerna bootstrap",
+    "start:app": "lerna run --scope @workshop/app start",
+    "build": "ultra -r --build build",
+    "test": "ultra -r test",
+    "test:coverage": "ultra -r test --coverage",
+    "test:summary": "./scripts/summary.sh",
+    "test:all": "yarn test:coverage && yarn test:summary"
+  },
+  "dependencies": {
+    "lerna": "^3.22.1"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@testing-library/dom": "^7.20.0",
+    "@testing-library/jest-dom": "^5.11.0",
+    "@testing-library/react": "^10.4.5",
+    "@testing-library/react-hooks": "^3.3.0",
+    "@types/jest": "^26.0.4",
+    "@types/react": "^16.9.41",
+    "@types/react-dom": "^16.9.8",
+    "babel-jest": "^26.1.0",
+    "jest": "^26.1.0",
+    "nyc": "^15.1.0",
+    "prettier": "^2.0.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-test-renderer": "^16.13.1",
+    "ts-jest": "^26.1.1",
+    "typescript": "^3.9.6",
+    "ultra-runner": "^3.5.0"
+  }
+}
