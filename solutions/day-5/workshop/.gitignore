@@ -1,5 +1,7 @@
 node_modules/
 .ultra.cache.json
 coverage/
+cypress-coverage/
 esm/
 .next
+.nyc_output

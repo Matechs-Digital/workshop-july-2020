@@ -9,5 +9,8 @@
   "dependencies": {
     "@workshop/common": "^0.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "nyc": {
+    "report-dir": "cypress-coverage"
+  }
 }
