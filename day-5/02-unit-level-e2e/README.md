@@ -20,7 +20,7 @@ create a file calles `cypress.json` in `packages/components-e2e` with:
   "componentFolder": "src",
   "nodeVersion": "system",
   "env": {
-    "coverage": true
+    "coverage": false
   }
 }
 ```
@@ -39,7 +39,11 @@ const path = require("path");
 
 module.exports = {
   resolve: {
-    extensions: [".tsx", ".js"],
+    alias: {
+      "@workshop/components": path.resolve("../components/src"),
+      "@workshop/common": path.resolve("../common/src"),
+    },
+    extensions: [".tsx", ".ts", ".js", ".jsx"],
   },
   module: {
     rules: [
