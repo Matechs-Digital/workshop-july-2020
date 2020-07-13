@@ -2,8 +2,8 @@
   "name": "@workshop/app",
   "version": "0.0.0",
   "dependencies": {
-    "@workshop/common": "file:../common",
-    "@workshop/components": "file:../components",
+    "@workshop/common": "^0.0.0",
+    "@workshop/components": "^0.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },

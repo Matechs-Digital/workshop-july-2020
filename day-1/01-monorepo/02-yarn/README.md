@@ -44,7 +44,7 @@ Clean all `node_modules`, TIP add the following or equivalent to your scripts (a
 ```json
 {
   "scripts": {
-    "clean": "rimraf ./node_modules && rimraf ./packages/*/node_modules"
+    "clean": "rimraf ./packages/*/node_modules && rimraf ./node_modules"
   }
 }
 ```
