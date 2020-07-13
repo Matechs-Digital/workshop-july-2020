@@ -9,10 +9,12 @@
   },
   "devDependencies": {
     "lerna": "^3.22.1",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "ultra-runner": "^3.5.0"
   },
   "scripts": {
     "clean": "rimraf ./packages/*/node_modules && rimraf ./node_modules",
-    "bootstrap": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap",
+    "build": "ultra -r --build build"
   }
 }
