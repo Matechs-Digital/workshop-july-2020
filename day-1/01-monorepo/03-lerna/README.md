@@ -8,7 +8,7 @@ As a second step we will integrate lerna to work with `yarn workspaces` and we w
 
 Copy from step `01-npm` and clean all `node_modules`.
 
-Install `lerna` in your workspace root, `npm install --save lerna`, run `npx lerna init`.
+Install `lerna` in your workspace root, `npm install --save-dev lerna`, run `npx lerna init`.
 
 You should now have a file called `lerna.json` in your `workshop` directory and it should look like:
 

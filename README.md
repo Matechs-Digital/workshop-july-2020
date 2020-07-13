@@ -22,4 +22,4 @@ Other infos are:
 
 - We take small breaks ideally 5/10 mins every hour.
 - Q&A should be interactive during the workshop, there are no planned Q&A slots.
-- In in person worshops I would be able to walk by you and share a view on the screen to discuss ideas and problems, let's try to do that here with screen-sharing too.
+- In person worshops I would be able to walk by you and share a view on the screen to discuss ideas and problems, let's try to do that here with screen-sharing too.

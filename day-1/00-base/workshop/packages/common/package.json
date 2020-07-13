@@ -1,0 +1,14 @@
+{
+  "name": "@workshop/common",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "echo dummy common",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "jest --passWithNoTests"
+  },
+  "devDependencies": {
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.2",
+    "typescript": "^3.9.6"
+  }
+}

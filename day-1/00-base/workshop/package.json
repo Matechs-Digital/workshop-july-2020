@@ -1,0 +1,37 @@
+{
+  "name": "workshop",
+  "version": "0.0.0",
+  "private": "true",
+  "workspaces": [
+    "./packages/*"
+  ],
+  "scripts": {
+    "clean:nm": "rimraf ./packages/*/node_modules && rimraf ./node_modules",
+    "clean:yarn": "rimraf ./yarn.lock && rimraf ./packages/*/yarn.lock",
+    "clean:npm": "rimraf ./package-lock.json && rimraf ./packages/*/package-lock.json",
+    "clean:all": "yarn clean:yarn && yarn clean:npm && yarn clean:nm",
+    "bootstrap": "lerna bootstrap",
+    "build": "ultra -r --build build",
+    "test": "ultra -r test",
+    "test:coverage": "ultra -r test --coverage",
+    "test:summary": "./scripts/summary.sh",
+    "test:all": "yarn test:coverage && yarn test:summary"
+  },
+  "devDependencies": {
+    "jest": "^26.1.0",
+    "lerna": "^3.22.1",
+    "nyc": "^15.1.0",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.1.2",
+    "typescript": "^3.9.6",
+    "ultra-runner": "^3.5.0",
+    "yarn-deduplicate": "^2.1.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/jest": "^26.0.4",
+    "babel-jest": "^26.1.0"
+  }
+}

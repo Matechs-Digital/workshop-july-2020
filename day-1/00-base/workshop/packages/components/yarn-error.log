@@ -1,0 +1,52 @@
+Arguments: 
+  /home/ma/.nvm/versions/node/v12.18.0/bin/node /home/ma/.nvm/versions/node/v12.18.0/bin/yarn add typescript -D
+
+PATH: 
+  /home/ma/.vscode-server/bin/cd9ea6488829f560dc949a8b2fb789f3cdc05f5d/bin:/home/ma/.nvm/versions/node/v12.18.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Intel/WiFi/bin/:/mnt/c/Program Files/Common Files/Intel/WirelessCommon/:/mnt/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/DAL:/mnt/c/Program Files/Intel/Intel(R) Management Engine Components/DAL:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/Users/ma/.windows-build-tools/python27/:/mnt/c/Users/ma/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/ma/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/ma/AppData/Roaming/nvm:/mnt/c/Program Files/nodejs:/snap/bin
+
+Yarn version: 
+  1.22.4
+
+Node version: 
+  12.18.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@workshop%2fcommon: Not found
+      at Request.params.callback [as _callback] (/home/ma/.nvm/versions/node/v12.18.0/lib/node_modules/yarn/lib/cli.js:66987:18)
+      at Request.self.callback (/home/ma/.nvm/versions/node/v12.18.0/lib/node_modules/yarn/lib/cli.js:140748:22)
+      at Request.emit (events.js:315:20)
+      at Request.<anonymous> (/home/ma/.nvm/versions/node/v12.18.0/lib/node_modules/yarn/lib/cli.js:141720:10)
+      at Request.emit (events.js:315:20)
+      at IncomingMessage.<anonymous> (/home/ma/.nvm/versions/node/v12.18.0/lib/node_modules/yarn/lib/cli.js:141642:12)
+      at Object.onceWrapper (events.js:421:28)
+      at IncomingMessage.emit (events.js:327:22)
+      at endReadableNT (_stream_readable.js:1221:12)
+      at processTicksAndRejections (internal/process/task_queues.js:84:21)
+
+npm manifest: 
+  {
+    "name": "@workshop/components",
+    "version": "0.0.0",
+    "dependencies": {
+      "@workshop/common": "^0.0.0",
+      "react": "^16.13.1",
+      "react-dom": "^16.13.1"
+    },
+    "scripts": {
+      "start": "echo dummy components",
+      "build": "tsc -p tsconfig.build.json",
+      "test": "jest --passWithNoTests"
+    },
+    "devDependencies": {
+      "jest": "^26.1.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

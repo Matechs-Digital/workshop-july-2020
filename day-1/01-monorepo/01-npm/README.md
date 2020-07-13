@@ -14,7 +14,7 @@ Create a basic monorepo structure with the following package shape:
       - `/package.json` with name `@workshop/common` and `"version": "0.0.0"`
     - `/components`
       - `/index.js` with a simple dummy export
-      - `/package.json` with name `@workshop/components`
+      - `/package.json` with name `@workshop/components` and `"version": "0.0.0"`
     - `/app`
       - `/index.js` with a simple dummy export
       - `/package.json` with name `@workshop/app` and `"version": "0.0.0"`
@@ -41,3 +41,11 @@ Add `react` & `react-dom` as a dependency of `@workshop/components` & `@workshop
 ### Exercise 5
 
 Add `start` in the `scripts` section of `@workshop/app` and run it
+
+```json
+{
+  "scripts": {
+    "start": "echo dummy project"
+  }
+}
+```

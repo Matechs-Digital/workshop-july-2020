@@ -17,10 +17,10 @@ Create the following files in your workspace root:
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,
-    "moduleResolution": "node",
-    "include": ["packages/**/**/*.ts", "packages/**/**/*.tsx"],
-    "exclude": ["node_modules", "packages/**/node_modules"]
-  }
+    "moduleResolution": "node"
+  },
+  "include": ["packages/**/**/*.ts", "packages/**/**/*.tsx"],
+  "exclude": ["node_modules", "packages/**/node_modules"]
 }
 ```
 

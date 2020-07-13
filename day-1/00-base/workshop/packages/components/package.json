@@ -1,0 +1,17 @@
+{
+  "name": "@workshop/components",
+  "version": "0.0.0",
+  "dependencies": {
+    "@workshop/common": "^0.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "scripts": {
+    "start": "echo dummy components",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "jest --passWithNoTests"
+  },
+  "devDependencies": {
+    "jest": "^26.1.0"
+  }
+}
