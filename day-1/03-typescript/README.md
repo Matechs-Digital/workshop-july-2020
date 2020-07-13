@@ -17,10 +17,10 @@ Create the following files in your workspace root:
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,
-    "moduleResolution": "node",
-    "include": ["packages/**/**/*.ts", "packages/**/**/*.tsx"],
-    "exclude": ["node_modules", "packages/**/node_modules"]
-  }
+    "moduleResolution": "node"
+  },
+  "include": ["packages/**/**/*.ts", "packages/**/**/*.tsx"],
+  "exclude": ["node_modules", "packages/**/node_modules"]
 }
 ```
 
@@ -91,7 +91,7 @@ Replace the build command of each package to `tsc -p tsconfig.build.json` & run 
 
 ### Exercise 4
 
-Install jest types and babel `yarn add --D -W babel-jest @babel/core @babel/preset-env @types/jest @babel/preset-typescript ts-jest`
+Install jest types and babel `yarn add -D -W babel-jest @babel/core @babel/preset-env @types/jest @babel/preset-typescript ts-jest`
 
 Create in each project a file called `babel.config.js` with the following content:
 

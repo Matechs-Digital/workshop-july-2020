@@ -7,6 +7,8 @@
     "react-dom": "^16.13.1"
   },
   "scripts": {
-    "build": "echo build components"
+    "build": "tsc -p tsconfig.build.json",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "jest --passWithNoTests --coverage"
   }
 }

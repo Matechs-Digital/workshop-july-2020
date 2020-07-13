@@ -9,6 +9,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "build": "echo build app"
+    "build": "tsc -p tsconfig.build.json",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "jest --passWithNoTests --coverage"
   }
 }

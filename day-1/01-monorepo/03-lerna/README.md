@@ -101,6 +101,6 @@ Change the config `package.json` to include :
 
 Run `yarn` && `yarn bootstrap`.
 
-You should now have everything bootstrapped using `yarn workspaces`.
+You should now have everything bootstrapped using yarn workspaces.
 
 Confirm everything works by running `yarn start:app`
