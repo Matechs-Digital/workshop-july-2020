@@ -1,6 +1,6 @@
 # Workshop: Testing in TypeScript
 
-In this workshoup we will learn about the different aspects of testing code in typescript, we will have a focus on frontend testing using react but we will cover more details that represent the generic topic of testing. Because typescript is a statically type language we will also go through a set of potential approaches to encode as many informations as possible at the type level to redue the need to test and to make test easier. We will also go through a set of potential soutions that drive app-level design choices as part of the process trying to maximise the efficiency of the typescript compiler.
+In this workshop we will learn about the different aspects of testing code in typescript, we will have a focus on frontend testing using react but we will cover more details that represent the generic topic of testing. Because typescript is a statically type language we will also go through a set of potential approaches to encode as many informations as possible at the type level to redue the need to test and to make test easier. We will also go through a set of potential soutions that drive app-level design choices as part of the process trying to maximise the efficiency of the typescript compiler.
 
 ## Material
 
