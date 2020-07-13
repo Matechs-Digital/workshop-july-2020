@@ -91,7 +91,7 @@ Replace the build command of each package to `tsc -p tsconfig.build.json` & run 
 
 ### Exercise 4
 
-Install jest types and babel `yarn add --D -W babel-jest @babel/core @babel/preset-env @types/jest @babel/preset-typescript`
+Install jest types and babel `yarn add --D -W babel-jest @babel/core @babel/preset-env @types/jest @babel/preset-typescript ts-jest`
 
 Create in each project a file called `babel.config.js` with the following content:
 
