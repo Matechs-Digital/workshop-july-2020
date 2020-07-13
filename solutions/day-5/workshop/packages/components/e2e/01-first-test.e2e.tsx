@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { mount } from "cypress-react-unit-test";
-import { View } from "@workshop/components/previous/02-context";
+import { View } from "../src/02-context";
 import * as dtl from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 

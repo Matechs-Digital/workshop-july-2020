@@ -4,9 +4,9 @@
   "viewportWidth": 500,
   "viewportHeight": 500,
   "experimentalComponentTesting": true,
-  "componentFolder": "src",
+  "componentFolder": "e2e",
   "nodeVersion": "system",
   "env": {
-    "coverage": false
+    "coverage": true
   }
 }

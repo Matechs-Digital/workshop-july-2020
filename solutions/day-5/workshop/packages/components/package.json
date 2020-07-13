@@ -4,7 +4,9 @@
   "scripts": {
     "build": "rimraf esm && tsc -p tsconfig.build.json",
     "test": "jest --passWithNoTests",
-    "test:watch": "jest --passWithNoTests --watch"
+    "test:watch": "jest --passWithNoTests --watch",
+    "e2e:open": "cypress open",
+    "e2e:run": "cypress run"
   },
   "dependencies": {
     "@workshop/common": "^0.0.0"
