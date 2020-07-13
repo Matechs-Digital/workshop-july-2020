@@ -237,7 +237,7 @@ Update scripts to be:
 {
   "scripts": {
     "start": "next dev",
-    "build": "rm -rf .next; next build",
+    "build": "rimraf .next; next build",
     "test": "jest --passWithNoTests"
   }
 }

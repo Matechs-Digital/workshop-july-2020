@@ -39,12 +39,12 @@ Change the config `workspaces` entry of your `workshop/package.json` with:
 }
 ```
 
-Clean all `node_modules`, TIP add the following or equivalent to your scripts:
+Clean all `node_modules`, TIP add the following or equivalent to your scripts (add rimraf to your repo root):
 
 ```json
 {
   "scripts": {
-    "clean": "rm -rf ./node_modules && rm -rf ./packages/*/node_modules"
+    "clean": "rimraf ./node_modules && rimraf ./packages/*/node_modules"
   }
 }
 ```
