@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, UseValueDb } from "./04-props";
+import { View, UseValueDb } from "../src/04-props";
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-test-renderer";

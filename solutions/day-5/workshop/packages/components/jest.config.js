@@ -10,4 +10,9 @@ module.exports = {
     '^.+\\.tsx?$': 'ts-jest',
   },
   setupFilesAfterEnv: ["./jest.setup.ts"],
+  globals: {
+    'ts-jest': {
+      tsConfig: 'tsconfig.test.json'
+    }
+  }
 };

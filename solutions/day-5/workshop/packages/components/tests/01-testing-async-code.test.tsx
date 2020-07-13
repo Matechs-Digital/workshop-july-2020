@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AsyncCounter, AutoIncrementAsync } from "./01-testing-async-code";
+import { AsyncCounter, AutoIncrementAsync } from "../src/01-testing-async-code";
 import * as rtl from "@testing-library/react";
 import * as T from "@workshop/common/previous/03-better-promise";
 import { act } from "react-dom/test-utils";

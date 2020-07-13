@@ -1,5 +1,5 @@
 import * as React from "react";
-import { valuesDbContext, View, UseValueDb } from "./02-context";
+import { valuesDbContext, View, UseValueDb } from "../src/02-context";
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-test-renderer";

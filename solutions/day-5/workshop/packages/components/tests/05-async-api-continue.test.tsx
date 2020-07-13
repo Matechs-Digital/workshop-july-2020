@@ -1,4 +1,4 @@
-import {} from "./03-async-api";
+import {} from "../src/03-async-api";
 
 describe("05-async-api-cont", () => {
   /**
