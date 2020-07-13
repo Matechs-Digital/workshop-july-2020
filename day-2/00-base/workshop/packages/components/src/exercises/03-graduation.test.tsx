@@ -7,4 +7,5 @@ describe("03-graduation", () => {
   /**
    * You may also use `@testing-library/user-event`
    */
+  it.todo("cover all");
 });

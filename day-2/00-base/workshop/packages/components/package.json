@@ -2,7 +2,7 @@
   "name": "@workshop/components",
   "version": "0.0.0",
   "scripts": {
-    "build": "rm -rf esm && tsc -p tsconfig.build.json",
+    "build": "rimraf esm && tsc -p tsconfig.build.json",
     "test": "jest --passWithNoTests"
   },
   "dependencies": {

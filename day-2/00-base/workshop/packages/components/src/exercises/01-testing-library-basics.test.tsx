@@ -1,13 +1,5 @@
 describe("01-testing-library-basics", () => {
   /**
-   * Add to your jest.config.js:
-   *
-   * transform: {
-   *  '^.+\\.tsx?$': 'ts-jest',
-   * }
-   */
-
-  /**
    * Exercise 1
    *
    * Without using any library except react, react-dom & jest
