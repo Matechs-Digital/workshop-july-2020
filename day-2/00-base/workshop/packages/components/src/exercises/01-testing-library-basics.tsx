@@ -18,7 +18,7 @@ export const Counter = () => {
   return (
     <>
       <button onClick={() => decrement()}>-</button>
-      <span>{count}</span>
+      <span data-testid={"test-count"}>{count}</span>
       <button onClick={() => increment()}>+</button>
     </>
   );
@@ -30,7 +30,7 @@ export const AsyncCounter = () => {
   const increment = () => {
     setTimeout(() => {
       setCount((current) => current + 1);
-    }, 1000);
+    }, 1500);
   };
 
   const decrement = () => {
