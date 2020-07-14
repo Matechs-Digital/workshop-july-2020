@@ -31,12 +31,3 @@ export const useKV = (kv: KeyValueStore) => {
 
   return kv.get(2);
 };
-
-/**
- * Uses useKV
- */
-export const useMainKV = () => {
-  const kv = keyValueStore();
-
-  return useKV(kv);
-};

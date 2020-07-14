@@ -5,5 +5,6 @@ module.exports = {
   testPathIgnorePatterns: ["node_modules", "esm"],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: "<rootDir>/../../",
-  })
+  }),
+  setupFilesAfterEnv: ["./jest.setup.ts"]
 };

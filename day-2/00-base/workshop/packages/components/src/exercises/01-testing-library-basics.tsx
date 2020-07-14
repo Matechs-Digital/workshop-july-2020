@@ -30,13 +30,13 @@ export const AsyncCounter = () => {
   const increment = () => {
     setTimeout(() => {
       setCount((current) => current + 1);
-    }, 1000);
+    }, 1500);
   };
 
   const decrement = () => {
     setTimeout(() => {
       setCount((current) => current - 1);
-    }, 1000);
+    }, 1500);
   };
 
   return (
