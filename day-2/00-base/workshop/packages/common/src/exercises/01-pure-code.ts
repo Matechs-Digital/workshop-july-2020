@@ -1,7 +1,4 @@
-/**
- * calculates x + y
- */
-export const sum = (x: number, y: number): number => x + y;
+import * as S from "./01-pure-code-sum";
 
 /**
  * represent Person
@@ -28,6 +25,17 @@ export const changeFirstName = (firstName: string) => (p: Person): Person => ({
  * Calculates base * n using the sum function
  */
 export const multiplyByN = (n: number) => (base: number) => {
+  const i = Math.floor(n);
+  let m = 0;
+  for (let k = 0; k < i; k += 1) {
+    m = S.sum(m, base);
+  }
+  return m;
+};
+
+export const multiplyByN2 = (
+  { sum }: { sum: typeof S.sum } = { sum: S.sum }
+) => (n: number) => (base: number) => {
   const i = Math.floor(n);
   let m = 0;
   for (let k = 0; k < i; k += 1) {
