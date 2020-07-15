@@ -1,4 +1,4 @@
 import * as React from "react";
-import { moduleName } from "@workshop/common";
+import { RemConverter } from "@workshop/components/exercises/04-generative-react";
 
-export default () => <div>{moduleName}</div>;
+export default () => <RemConverter />;
