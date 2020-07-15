@@ -23,75 +23,84 @@
  * in case we do, what's the string? in case we don't what's the error?"
  */
 
+import { pipe } from "@workshop/common/previous/01-pipe";
+import { Organization } from "./01-organizations";
+
 /**
  * Let's model a decoder for our data, we will encode the errors as a string[]
  */
 
-export type Result<A> = Either<string[], A>;
+export type Result<A> = Fail<string[]> | Success<A>;
 
-export interface Decoder<A> {
-  (u: unknown): Result<A>;
+export interface Fail<E> {
+  _tag: "Fail";
+  fail: E;
 }
 
-export type Either<E, A> = Left<E> | Right<A>;
-
-export interface Left<E> {
-  _tag: "Left";
-  left: E;
-}
-
-export interface Right<A> {
-  _tag: "Right";
-  right: A;
+export interface Success<A> {
+  _tag: "Success";
+  success: A;
 }
 
 /**
  * Exercise 1
  */
-
-export declare const left: <E>(e: E) => Either<E, never>;
+export const fail = <E>(e: E): Fail<E> => ({
+  _tag: "Fail",
+  fail: e,
+});
 
 /**
  * Exercise 2
  */
+export const success = <A>(a: A): Success<A> => ({
+  _tag: "Success",
+  success: a,
+});
 
-export declare const right: <A>(a: A) => Either<never, A>;
+/**
+ * We model a decoder with the following signature
+ * This is (u: unknown) => Result<A>
+ */
+export interface Decoder<A> {
+  (u: unknown): Result<A>;
+}
 
 /**
  * Exercise 3
  */
+export declare const decodeString: Decoder<string>;
 
+/**
+ * Exercise 4
+ */
+export declare const decodeNumber: Decoder<number>;
+
+/**
+ * Exercise 5
+ */
+export declare const decodeDate: Decoder<Date>;
+
+/**
+ * Exercise 6
+ */
 export declare const chain: <A, B>(
   f: (a: A) => Result<B>
 ) => (self: Decoder<A>) => Decoder<B>;
 
 /**
- * Exercise 4
+ * Exercise 7
  */
-
 export declare const map: <A, B>(
   f: (a: A) => B
 ) => (self: Decoder<A>) => Decoder<B>;
 
 /**
- * Exercise 5
+ * Exercise 8
  */
-
-export declare const decodeString: Decoder<string>;
-
-/**
- * Exercise 6
- */
-
-export declare const decodeDate: Decoder<Date>;
-
-/**
- * Exercise 7: Hard
- */
-
-export declare function decodeObject<O extends Record<string, Decoder<any>>>(
+export declare const decodeObject: <O extends Record<string, Decoder<any>>>(
   o: O
-): Decoder<{ [k in keyof O]: [O[k]] extends [Decoder<infer K>] ? K : never }>;
+) => Decoder<{ [k in keyof O]: [O[k]] extends [Decoder<infer K>] ? K : never }>;
 
 /**
  * Model for a person
@@ -106,58 +115,32 @@ export interface PersonWithBirthDate extends Person {
 }
 
 /**
- * Exercise 8
+ * Exercise 9
  */
-
 export declare const decodePerson: Decoder<Person>;
 
 /**
- * Exercise 9
+ * Exercise 10
  */
 export declare const decodePersonWithBirthDate: Decoder<PersonWithBirthDate>;
 
 /**
- * Write a model for Organization
+ * Exercise 11
  */
-
-export interface Organization {
-  login: string;
-  id: number;
-  node_id: string;
-  url: string;
-  repos_url: string;
-  events_url: string;
-  hooks_urs: string;
-  issues_url: string;
-  members_url: string;
-  public_members_url: string;
-  avatar_url?: string;
-  description?: string;
-}
-
-/**
- * Needs partial values...
- */
-
-/**
- * Exercise 8: Hard
- */
-
-export declare function decodeObjectWithPartials<
+export declare const decodeObjectWithPartials: <
   O extends Record<string, Decoder<any>>,
   P extends Record<string, Decoder<any>>
 >(
   o: O,
   p: P
-): Decoder<
+) => Decoder<
   { [k in keyof O]: [O[k]] extends [Decoder<infer K>] ? K : never } &
     { [k in keyof O]?: [O[k]] extends [Decoder<infer K>] ? K : never }
 >;
 
 /**
- * Exercise 9
+ * Exercise 12
  */
-
 export declare const decodeOrganization: Decoder<Organization>;
 
 /**
@@ -177,14 +160,15 @@ export type TypeOf<D extends Decoder<any>> = [D] extends [Decoder<infer A>]
  * Example
  */
 
-export declare const decodeNumber: Decoder<number>;
-
-export declare const walletDecoder: Decoder<{ id: string; balance: number }>;
+export declare const walletDecoder: Decoder<{
+  id: string;
+  balance: number;
+}>;
 
 export interface Wallet extends TypeOf<typeof walletDecoder> {}
 
 /**
- * Nice, only another problem left,
+ * Nice, only another problem Fail,
  * walletDecoder has type Decoder<{ id: string; balance: number; }>
  *
  * we would like it to be: Decoder<Wallet>
@@ -195,11 +179,11 @@ export interface Wallet extends TypeOf<typeof walletDecoder> {}
  */
 export const as = <T>() => (k: Decoder<T>): Decoder<T> => k;
 
-const User_ = decodeObject({
-  id: decodeString,
-  email: decodeString,
-});
+declare const User_: Decoder<{
+  id: string;
+  email: string;
+}>;
 
 export interface User extends TypeOf<typeof User_> {}
 
-export const UserDecoder = as<User>()(User_);
+export declare const UserDecoder: Decoder<User>;
