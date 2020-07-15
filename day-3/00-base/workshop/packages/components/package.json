@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "build": "rimraf esm && tsc -p tsconfig.build.json",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --passWithNoTests --watch"
   },
   "dependencies": {
     "@workshop/common": "^0.0.0",

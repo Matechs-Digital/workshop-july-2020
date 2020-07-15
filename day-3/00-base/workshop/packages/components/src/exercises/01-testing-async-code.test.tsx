@@ -39,8 +39,6 @@ describe("01-testing-async-code", () => {
     R.unmount();
 
     await T.runPromise(T.sleep(2000));
-
-    // note no act() warnings
   });
 
   /**
