@@ -3,12 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "start": "next dev",
-    "build": "rm -rf .next; next build",
+    "build": "rimraf .next; next build",
     "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@workshop/common": "^0.0.0",
     "@workshop/components": "^0.0.0",
-    "next": "^9.4.4"
+    "next": "^9.4.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   }
 }

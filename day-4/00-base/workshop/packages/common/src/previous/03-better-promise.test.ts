@@ -1,20 +1,11 @@
-import { pipe } from "./01-pipe";
-import * as T from "./03-better-promise";
+//import { pipe } from "./01-pipe";
+//import * as T from "./03-better-promise";
 
 describe("03-better-promise", () => {
   /**
    * Exercise 1
    */
-  it("test sync", async () => {
-    const result = await pipe(
-      T.sync(() => {
-        return 1;
-      }),
-      T.runPromise
-    );
-
-    expect(result).toEqual(T.success(1));
-  });
+  it.todo("test sync");
 
   /**
    * Exercise 1
@@ -29,30 +20,7 @@ describe("03-better-promise", () => {
   /**
    * Exercise 3
    */
-  it("test fromPromise", async () => {
-    const fromPromise = T.fromPromise((u) =>
-      u instanceof Error ? u.message : "Unexpected"
-    );
-
-    const result = await pipe(
-      fromPromise(() => Promise.resolve(1)),
-      T.runPromise
-    );
-
-    const result2 = await pipe(
-      fromPromise(() => Promise.reject(1)),
-      T.runPromise
-    );
-
-    const result3 = await pipe(
-      fromPromise(() => Promise.reject(new Error("Task Error"))),
-      T.runPromise
-    );
-
-    expect(result).toEqual(T.success(1));
-    expect(result2).toEqual(T.failure("Unexpected"));
-    expect(result3).toEqual(T.failure("Task Error"));
-  });
+  it.todo("test fromPromise");
 
   /**
    * Exercise 4
@@ -72,58 +40,12 @@ describe("03-better-promise", () => {
   /**
    * Exercise 7
    */
-  it("test headless running and tracing", async () => {
-    T.tracingContext.clear();
-
-    const f = jest.fn();
-
-    pipe(
-      T.fromNonFailingPromise(
-        () =>
-          new Promise((r) => {
-            setTimeout(() => {
-              f();
-              r(1);
-            }, 1000);
-          })
-      ),
-      T.runPromise
-    );
-
-    const results = await T.tracingContext.wait();
-
-    expect(f).toHaveBeenCalledTimes(1);
-
-    expect(results).toEqual([T.success(1)]);
-  });
+  it.todo("test headless running and tracing");
 
   /**
    * Exercise 8
    */
-  it("test headless running and tracing in failing conditions", async () => {
-    T.tracingContext.clear();
-
-    const f = jest.fn();
-
-    pipe(
-      T.fromPromise((u) => u as number)(
-        () =>
-          new Promise((_, r) => {
-            setTimeout(() => {
-              f();
-              r(1);
-            }, 1000);
-          })
-      ),
-      T.runPromise
-    );
-
-    const results = await T.tracingContext.wait();
-
-    expect(f).toHaveBeenCalledTimes(1);
-
-    expect(results).toEqual([T.failure(1)]);
-  });
+  it.todo("test headless running and tracing in failing conditions");
 
   /**
    * Exercise 9
@@ -133,45 +55,7 @@ describe("03-better-promise", () => {
   /**
    * Exercise 10
    */
-  it("test headless running and tracing in interruption conditions", async () => {
-    T.tracingContext.clear();
-
-    const f = jest.fn();
-    const g = jest.fn();
-    const h = jest.fn();
-
-    const cancel = pipe(
-      T.fromNonFailingPromise(
-        () =>
-          new Promise<number>((r) => {
-            setTimeout(() => {
-              f();
-              r(1);
-            }, 1000);
-          })
-      ),
-      T.chain((n) =>
-        T.sync(() => {
-          g();
-          return n;
-        })
-      ),
-      T.runAsync((exit) => {
-        h(exit);
-      })
-    );
-
-    cancel();
-
-    const results = await T.tracingContext.wait();
-
-    expect(f).toHaveBeenCalledTimes(0);
-    expect(g).toHaveBeenCalledTimes(0);
-    expect(h).toHaveBeenCalledTimes(1);
-    expect(h).toHaveBeenCalledWith(T.interrupt);
-
-    expect(results).toEqual([T.interrupt]);
-  });
+  it.todo("test headless running and tracing in interruption conditions");
 
   /**
    * Exercise 10
@@ -236,55 +120,10 @@ describe("03-better-promise", () => {
   /**
    * Exercise 22
    */
-  it("test onInterrupt", async () => {
-    const f = jest.fn();
-    const result = await new Promise<T.Exit<never, void>>((r) => {
-      const cancel = pipe(
-        T.sleep(100),
-        T.onInterrupt(() =>
-          T.sync(() => {
-            f();
-          })
-        ),
-        T.runAsync((e) => {
-          r(e);
-        })
-      );
-
-      setTimeout(() => {
-        cancel();
-      }, 10);
-    });
-    expect(result).toEqual(T.interrupt);
-    expect(f).toHaveBeenCalledTimes(1);
-  });
+  it.todo("test onInterrupt");
 
   /**
    * Exercise 23
    */
-  it("test fromInterruptibleCallback", async () => {
-    const f = jest.fn();
-    const result = await new Promise<T.Exit<never, void>>((r) => {
-      const cancel = pipe(
-        T.fromInterruptibleCallback((res: T.Cb<void>) => {
-          const timer = setTimeout(() => {
-            res();
-          }, 1000);
-          return T.sync(() => {
-            clearInterval(timer);
-            f();
-          });
-        }),
-        T.runAsync((e) => {
-          r(e);
-        })
-      );
-
-      setTimeout(() => {
-        cancel();
-      }, 10);
-    });
-    expect(result).toEqual(T.interrupt);
-    expect(f).toHaveBeenCalledTimes(1);
-  });
+  it.todo("test fromInterruptibleCallback");
 });

@@ -1,3 +1,4 @@
-import * as React from "react"
+import * as React from "react";
+import { moduleName } from "@workshop/common";
 
-export default () => <div></div>;
+export default () => <div>{moduleName}</div>;

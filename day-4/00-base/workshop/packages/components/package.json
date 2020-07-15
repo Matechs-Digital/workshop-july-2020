@@ -2,12 +2,12 @@
   "name": "@workshop/components",
   "version": "0.0.0",
   "scripts": {
-    "build": "rm -rf esm && tsc -p tsconfig.build.json",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --passWithNoTests --watch"
+    "build": "rimraf esm && tsc -p tsconfig.build.json",
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
-    "@workshop/common": "^0.0.0"
-  },
-  "devDependencies": {}
+    "@workshop/common": "^0.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
 }

@@ -10,5 +10,6 @@ module.exports = {
       },
     ],
     "@babel/preset-typescript",
+    "next/babel",
   ],
 };

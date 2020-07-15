@@ -1,8 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "jsx": "react",
-    "noErrorTruncation": true
+    "jsx": "react"
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

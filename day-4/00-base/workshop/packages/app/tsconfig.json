@@ -19,11 +19,11 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@workshop/common": ["../common/esm"],
-      "@workshop/common/*": ["../common/esm/*"],
-      "@workshop/components": ["../components/esm"],
-      "@workshop/components/*": ["../components/esm/*"],
-      "@workshop/app": ["../app/build"],
+      "@workshop/common": ["../common/src"],
+      "@workshop/common/*": ["../common/src/*"],
+      "@workshop/components": ["../components/src"],
+      "@workshop/components/*": ["../components/src/*"],
+      "@workshop/app": ["../app/src"],
       "@workshop/app/pages": ["../app/src/pages"],
       "@workshop/app/pages/*": ["../app/src/pages/*"],
       "@workshop/app/*": ["../app/src/*"]
