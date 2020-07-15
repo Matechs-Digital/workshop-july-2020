@@ -9,39 +9,17 @@ describe("04-generative-react", () => {
   /**
    * Exercise 1 (2 mins)
    */
-  it("should render correctly", () => {
-    expect(RTL.render(<RemConverter />)).toBeDefined();
-  });
+  it.todo("should render correctly");
 
   /**
    * Exercise 2 (5 mins)
    */
-  it("should convert px to the right rem value", async () => {
-    const { getByTestId, getByText } = RTL.render(<RemConverter />);
-    RTL.fireEvent.change(getByTestId("px"), {
-      target: { value: "32" },
-    });
-    RTL.fireEvent.click(getByText("Convert"));
-    expect((getByTestId("rem") as HTMLInputElement).value).toBe("2");
-  });
+  it.todo("should convert px to the right rem value");
 
   /**
    * Exercise 3 (5 mins)
    */
-  it("should convert px to rem using property based assertion", async () => {
-    const { getByTestId, getByText } = RTL.render(<RemConverter />);
-    fc.assert(
-      fc.property(fc.nat(), fc.constant(16), (px, baseFontSize) => {
-        RTL.fireEvent.change(getByTestId("px"), {
-          target: { value: `${px}` },
-        });
-        RTL.fireEvent.click(getByText("Convert"));
-        expect((getByTestId("rem") as HTMLInputElement).value).toBe(
-          `${px / baseFontSize}`
-        );
-      })
-    );
-  });
+  it.todo("should convert px to rem using property based assertion");
 
   /**
    * Exercise 3 (10 mins)
