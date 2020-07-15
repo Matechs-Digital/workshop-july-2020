@@ -50,17 +50,17 @@ export const final = new KeyValueStore()
  * The Pipeable Approach
  */
 
-export class KeyValueStoreP {
-  constructor(readonly kv = new Map<string, string>()) {}
+export class KeyValueStoreP<K, V> {
+  constructor(readonly kv = new Map<K, V>()) {}
 
   copyKV() {
     return new Map(this.kv);
   }
 }
 
-export const empty = () => new KeyValueStoreP();
+export const empty = <K, V>() => new KeyValueStoreP<K, V>();
 
-export const add = (k: string, v: string) => (kv: KeyValueStoreP) => {
+export const add = <K, V>(k: K, v: V) => (kv: KeyValueStoreP<K, V>) => {
   const newKV = kv.copyKV();
 
   newKV.set(k, v);
@@ -68,16 +68,21 @@ export const add = (k: string, v: string) => (kv: KeyValueStoreP) => {
   return new KeyValueStoreP(newKV);
 };
 
-export const get = (k: string) => (kv: KeyValueStoreP) => {
+export const get = <K>(k: K) => <V>(kv: KeyValueStoreP<K, V>) => {
   return kv.kv.get(k);
+};
+
+export const stringKeys = <K extends string, V>(
+  kv: KeyValueStoreP<K, V>
+): string[] => {
+  return Array.from(kv.kv.keys());
 };
 
 /**
  * Usage
  */
-
 export const finalP = pipe(
-  empty(),
+  empty<string, string>(),
   add("0", "0"),
   add("1", "1"),
   add("2", "2"),
