@@ -2,8 +2,15 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as DTL from "@testing-library/dom";
 import * as RTL from "@testing-library/react";
-import { Message, Counter, AsyncCounter } from "./01-testing-library-basics";
+import {
+  Message,
+  Counter,
+  AsyncCounter,
+  AutoIncrement,
+  AutoIncrementAsync,
+} from "./01-testing-library-basics";
 import { act } from "react-dom/test-utils";
+import * as timers from "./01-timers";
 
 afterEach(() => {
   jest.useRealTimers();
@@ -144,7 +151,16 @@ describe("01-testing-library-basics", () => {
   /**
    * Exercise 10
    */
-  it.todo("assert that AutoIncrement increments after 5 seconds");
+  it("assert that AutoIncrement increments after 5 seconds", () => {
+    jest.useFakeTimers();
+    const { getByText, unmount } = RTL.render(<AutoIncrement />);
+    getByText("0");
+    act(() => {
+      jest.advanceTimersByTime(5000);
+    });
+    getByText("1");
+    unmount();
+  });
 
   /**
    * Exercise 11

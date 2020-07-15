@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as timers from "./01-timers";
 
 export const Message = ({ message }: { message: string }) => (
   <div data-testid={"message-box"}>{message}</div>
@@ -76,7 +77,7 @@ export const AutoIncrementAsync = () => {
 
   const increment = async () => {
     await new Promise((r) => {
-      setTimeout(() => {
+      timers.timeout(() => {
         r();
       }, 100);
     });
@@ -85,7 +86,7 @@ export const AutoIncrementAsync = () => {
   };
 
   React.useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = timers.interval(() => {
       increment();
     }, 5000);
     return () => {
