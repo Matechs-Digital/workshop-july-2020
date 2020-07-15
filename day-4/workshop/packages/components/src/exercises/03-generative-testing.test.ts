@@ -35,7 +35,7 @@ describe("02-fast-check", () => {
   /**
    * Exercise 5 (5 mins)
    */
-  it.todo("arbitraryMinLenghtString has a min length");
+  it.todo("arbitraryMinLengthString has a min length");
 
   /**
    * Exercise 6 (3 mins)

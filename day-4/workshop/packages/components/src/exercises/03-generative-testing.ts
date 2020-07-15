@@ -35,7 +35,7 @@ export declare const arbitraryString: fc.Arbitrary<string>;
  * Exercise 5 (3 min),
  * use a default maximim of n + 10
  */
-export declare const arbitraryMinLenghtString: (
+export declare const arbitraryMinLengthString: (
   n: number,
   m?: number
 ) => fc.Arbitrary<string>;
