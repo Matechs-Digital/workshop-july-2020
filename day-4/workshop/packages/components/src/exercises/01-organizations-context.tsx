@@ -26,9 +26,9 @@
  * start point: 01-organizations.test.tsx
  */
 
-export {};
-
 import * as React from "react";
+import * as H from "./01-http";
+
 export interface Organization {
   login: string;
   id: number;
@@ -47,16 +47,16 @@ export const Loading = () => <div>Loading...</div>;
 export const ErrorMessage = ({ error }: { error: string }) => (
   <div>Error: {error}</div>
 );
+
 export const fetchOrganizations = async (
-  since = 0
+  since: number
 ): Promise<Organization[]> => {
-  const res = await fetch(
+  return await H.fetchJson<Organization[]>(
     `https://api.github.com/organizations?since=${since}`
   );
-  return (await res.json()) as Organization[];
 };
 export interface FetchOrganizationsContext {
-  fetchOrganizations: (since?: number) => Promise<Organization[]>;
+  fetchOrganizations: (since: number) => Promise<Organization[]>;
 }
 export const fetchOrgsContext = React.createContext<FetchOrganizationsContext>({
   fetchOrganizations,
