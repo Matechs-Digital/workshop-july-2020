@@ -11,6 +11,5 @@ module.exports = {
     ],
     "@babel/preset-typescript",
     "@babel/preset-react"
-  ],
-  //plugins: ["@babel/plugin-transform-regenerator"]
+  ]
 };

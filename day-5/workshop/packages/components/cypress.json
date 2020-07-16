@@ -1,6 +1,5 @@
 {
   "fixturesFolder": false,
-  "testFiles": "**/*e2e.*",
   "viewportWidth": 500,
   "viewportHeight": 500,
   "experimentalComponentTesting": true,
