@@ -1,6 +1,6 @@
 /**
  * Exercise 1 (5 mins):
- * move fetchOrganizations out of the component to be in its own module
+ * move fetchOrganizations out of the component to be in its own context
  */
 
 /**

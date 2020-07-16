@@ -1,6 +1,14 @@
 import * as React from "react";
 
-export const useValuesDb = () => {
+interface UseValuesDb {
+  set: (v: string) => Promise<void>;
+  all: string[];
+  first: () => string | undefined;
+  size: () => number;
+  loading: () => boolean;
+}
+
+export const useValuesDb = (): UseValuesDb => {
   const [all, setAll] = React.useState<string[]>([]);
   const [pending, setLoading] = React.useState<boolean[]>([]);
 
@@ -33,7 +41,16 @@ export const useValuesDb = () => {
   };
 };
 
+export interface UseValuesDbContext {
+  readonly useValuesDb: () => UseValuesDb;
+}
+
+export const useValuesDbContext = React.createContext<UseValuesDbContext>({
+  useValuesDb,
+});
+
 export const View = () => {
+  const { useValuesDb } = React.useContext(useValuesDbContext);
   const { all, set, first, size, loading } = useValuesDb();
 
   const textInput = React.useRef<HTMLInputElement>(null);
