@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import { mount } from "cypress-react-unit-test";
-import { View } from "../src/00-context";
+import { View } from "../../src/00-context";
 import * as React from "react";
 
 // import * as React from "react";
