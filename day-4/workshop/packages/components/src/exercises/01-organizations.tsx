@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as H from "./fetchJson";
 
 export interface Organization {
   login: string;
@@ -22,14 +23,13 @@ export const ErrorMessage = ({ error }: { error: string }) => (
 );
 
 export interface IOrgCtx {
-  fetchOrganizations: (since?: number) => Promise<Organization[]>;
+  fetchOrganizations: (since: number) => Promise<Organization[]>;
 }
 
-export const fetchOrganizations = async (since = 0) => {
-  const res = await fetch(
+export const fetchOrganizations = async (since: number) => {
+  return H.fetchJson<Organization[]>(
     `https://api.github.com/organizations?since=${since}`
   );
-  return (await res.json()) as Organization[];
 };
 
 export const OrgCtx = React.createContext<IOrgCtx>({

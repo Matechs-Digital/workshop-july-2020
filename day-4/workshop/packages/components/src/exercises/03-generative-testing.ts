@@ -14,12 +14,12 @@ import { Organization } from "./01-organizations";
 /**
  * Exercise 1 (3 min)
  */
-export declare const arbitraryInteger: fc.Arbitrary<number>;
+export const arbitraryInteger: fc.Arbitrary<number> = fc.integer();
 
 /**
  * Exercise 2 (3 min)
  */
-export declare const arbitraryFloat: fc.Arbitrary<number>;
+export const arbitraryFloat: fc.Arbitrary<number> = fc.float();
 
 /**
  * Exercise 3 (3 min)
@@ -53,7 +53,11 @@ export interface Person {
   lastName: string;
 }
 
-export declare const arbitraryPerson: fc.Arbitrary<Person>;
+export const arbitraryPerson: fc.Arbitrary<Person> = fc
+  .string()
+  .chain((firstName) =>
+    fc.string().map((lastName): Person => ({ firstName, lastName }))
+  );
 
 /**
  * Exercise 8 (3 min)

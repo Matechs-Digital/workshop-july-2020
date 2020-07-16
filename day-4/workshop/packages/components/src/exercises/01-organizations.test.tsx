@@ -1,11 +1,19 @@
 import * as React from "react";
 import * as RTL from "@testing-library/react";
+import * as RTH from "@testing-library/react-hooks";
 import {
   useOrganisationsContext,
   Organizations,
   OrganizationsState,
   Organization,
+  OrgCtx,
+  useOrganisation,
+  Done,
+  Loading,
+  Errored,
+  fetchOrganizations,
 } from "./01-organizations";
+import * as H from "./fetchJson";
 
 afterEach(RTL.cleanup);
 
@@ -179,43 +187,218 @@ describe("01-organizations", () => {
   /**
    * Exercise 1 (5 mins)
    */
-  it.todo("should begin with a loading state");
+  it("should begin with a loading state", async () => {
+    const Wrapper: React.FC = ({ children }) => (
+      <OrgCtx.Provider
+        value={{
+          fetchOrganizations: () => Promise.resolve([]),
+        }}
+      >
+        {children}
+      </OrgCtx.Provider>
+    );
+    const { result, waitForNextUpdate } = RTH.renderHook(useOrganisation, {
+      wrapper: Wrapper,
+    });
+    expect(result.current).toEqual({
+      _tag: "Loading",
+    });
+    await waitForNextUpdate();
+  });
 
   /**
    * Exercise 2 (5 mins)
    */
-  it.todo("should call the fetchSince function properly upon mounting");
+  it("should call the fetchSince function properly when mounted", async () => {
+    const fetchMock = jest.fn(() => Promise.reject());
+    const Wrapper: React.FC = ({ children }) => (
+      <OrgCtx.Provider
+        value={{
+          fetchOrganizations: fetchMock,
+        }}
+      >
+        {children}
+      </OrgCtx.Provider>
+    );
+    const { waitForNextUpdate } = RTH.renderHook(useOrganisation, {
+      wrapper: Wrapper,
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    await waitForNextUpdate();
+  });
 
   /**
    * Exercise 3 (5 mins)
    */
-  it.todo("transition to a done state in case of successful exits");
+  it("transition to a done state in case of successful exits", async () => {
+    const Wrapper: React.FC = ({ children }) => (
+      <OrgCtx.Provider
+        value={{
+          fetchOrganizations: () => Promise.resolve([]),
+        }}
+      >
+        {children}
+      </OrgCtx.Provider>
+    );
+    const { result, waitForNextUpdate } = RTH.renderHook(useOrganisation, {
+      wrapper: Wrapper,
+    });
+    expect(result.current).toMatchObject<Loading>({
+      _tag: "Loading",
+    });
+    await waitForNextUpdate();
+    expect(result.current).toMatchObject<Omit<Done, "nextPage">>({
+      _tag: "Done",
+      orgs: [],
+    });
+  });
 
   /**
    * Exercise 4 (5 mins)
    */
-  it.todo("transition to a errored state in case of api errors");
+  it("transition to a errored state in case of api errors", async () => {
+    const Wrapper: React.FC = ({ children }) => (
+      <OrgCtx.Provider
+        value={{
+          fetchOrganizations: () => {
+            return Promise.reject("Unexpected Error");
+          },
+        }}
+      >
+        {children}
+      </OrgCtx.Provider>
+    );
+    const { result, waitForNextUpdate } = RTH.renderHook(useOrganisation, {
+      wrapper: Wrapper,
+    });
+    await waitForNextUpdate();
+    expect(result.current).toMatchObject({
+      _tag: "Errored",
+      reason: "Unexpected Error",
+    });
+  });
 
   /**
    * Exercise 5 (5 mins)
    */
-  it.todo(
-    "should expose a next page to fetch the next page in the successful scenario"
-  );
+  it("should expose a next page function to fetch the next page in the successful scenario", async () => {
+    const Wrapper: React.FC = ({ children }) => (
+      <OrgCtx.Provider
+        value={{
+          fetchOrganizations: () => Promise.resolve([]),
+        }}
+      >
+        {children}
+      </OrgCtx.Provider>
+    );
+    const { result, waitForNextUpdate } = RTH.renderHook(useOrganisation, {
+      wrapper: Wrapper,
+    });
+    await waitForNextUpdate();
+    const data = result.current as Done;
+    expect(data._tag).toBe("Done");
+    expect(data.nextPage).toBeInstanceOf(Function);
+  });
 
   /**
    * Exercise 6 (5 mins)
    */
-  it.todo("should expose a retry function in case of errors");
+  it("should expose a retry function in case of errors", async () => {
+    const Wrapper: React.FC = ({ children }) => (
+      <OrgCtx.Provider
+        value={{
+          fetchOrganizations: () => {
+            return Promise.reject();
+          },
+        }}
+      >
+        {children}
+      </OrgCtx.Provider>
+    );
+    const { result, waitForNextUpdate } = RTH.renderHook(useOrganisation, {
+      wrapper: Wrapper,
+    });
+    await waitForNextUpdate();
+    const data = result.current as Errored;
+    expect(data._tag).toBe("Errored");
+    expect(data.retry).toBeInstanceOf(Function);
+  });
 
   /**
-   * Exercise 7 (5 mins)
+   * Exercise 7 (10 mins)
    */
-  it.todo("ensure fetching pages sequentially works fine");
+  it("ensure fetching pages sequentially works fine", async () => {
+    const fn = jest.fn(() =>
+      Promise.resolve([{ id: 1 }, { id: 99 }] as Organization[])
+    );
+    const Wrapper: React.FC = ({ children }) => (
+      <OrgCtx.Provider
+        value={{
+          fetchOrganizations: fn,
+        }}
+      >
+        {children}
+      </OrgCtx.Provider>
+    );
+    const { result, waitForNextUpdate } = RTH.renderHook(useOrganisation, {
+      wrapper: Wrapper,
+    });
+    await waitForNextUpdate();
+    const data = result.current as Done;
+    RTH.act(() => {
+      data.nextPage();
+    });
+    await waitForNextUpdate();
+    expect(fn).toBeCalledTimes(2);
+    expect(fn).toHaveBeenNthCalledWith(1, 0);
+    expect(fn).toHaveBeenNthCalledWith(2, 99);
+  });
 
   /**
    * Exercise 8 (5 mins)
    * use the coverage to discover any missing assertion in order to complete the
    * coverage for the business logic
    */
+  it("ensure reload pages on error works fine", async () => {
+    const fn = jest.fn(() => Promise.reject());
+    const Wrapper: React.FC = ({ children }) => (
+      <OrgCtx.Provider
+        value={{
+          fetchOrganizations: fn,
+        }}
+      >
+        {children}
+      </OrgCtx.Provider>
+    );
+    const { result, waitForNextUpdate } = RTH.renderHook(useOrganisation, {
+      wrapper: Wrapper,
+    });
+    await waitForNextUpdate();
+    const data = result.current as Errored;
+    RTH.act(() => {
+      data.retry();
+    });
+    await waitForNextUpdate();
+    expect(fn).toBeCalledTimes(2);
+    expect(fn).toHaveBeenNthCalledWith(1, 0);
+    expect(fn).toHaveBeenNthCalledWith(2, 0);
+  });
+
+  it("mock fetch", async () => {
+    const spy = jest.spyOn(H, "fetchJson");
+
+    spy.mockImplementation(() => Promise.resolve([]));
+
+    await fetchOrganizations(0);
+    await fetchOrganizations(2);
+
+    expect(spy).toHaveBeenNthCalledWith(
+      1,
+      "https://api.github.com/organizations?since=0"
+    );
+    expect(spy).toHaveBeenNthCalledWith(
+      2,
+      "https://api.github.com/organizations?since=2"
+    );
+  });
 });

@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@workshop/common": "^0.0.0",
+    "isomorphic-fetch": "^2.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   }

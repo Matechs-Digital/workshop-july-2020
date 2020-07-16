@@ -1,26 +1,28 @@
-/*
 import * as fc from "fast-check";
-import {
-  arbitraryInteger,
-  arbitraryFloat,
-  arbitraryString,
-  arbitraryMinLenghtString,
-  arbitraryIntegerAsString,
-  arbitraryPerson,
-  arbitraryPersonWithBirthDate,
-} from "./03-generative-testing";
-*/
+import { arbitraryInteger, arbitraryFloat } from "./03-generative-testing";
 
 describe("02-fast-check", () => {
   /**
    * Exercise 1 (3 mins)
    */
-  it.todo("arbitraryInteger is an integer");
+  it("arbitraryInteger is an integer", () => {
+    fc.assert(
+      fc.property(arbitraryInteger, (n) =>
+        expect(Number.isInteger(n)).toBeTruthy()
+      )
+    );
+  });
 
   /**
    * Exercise 2 (3 mins)
    */
-  it.todo("arbitraryFloat is finite");
+  it("arbitraryFloat is finite", () => {
+    fc.assert(
+      fc.property(arbitraryFloat, (n) =>
+        expect(Number.isFinite(n)).toBeTruthy()
+      )
+    );
+  });
 
   /**
    * Exercise 3 (3 mins)
