@@ -1,4 +1,13 @@
-import {} from "./01-organizations-context";
+import * as React from "react";
+import * as RTL from "@testing-library/react";
+import {
+  useOrganisationsContext,
+  Organizations,
+  OrganizationsState,
+  Organization,
+} from "./01-organizations";
+
+afterEach(RTL.cleanup);
 
 describe("01-organizations", () => {
   /**
@@ -8,42 +17,154 @@ describe("01-organizations", () => {
   /**
    * Exercise 1 (5 mins)
    */
-  it.todo("should display Loading on initial state");
+  it("should display Loading on initial state", () => {
+    const Wrapper: React.FC = ({ children }) => (
+      <useOrganisationsContext.Provider
+        value={{
+          useOrganisation() {
+            return {
+              _tag: "Loading",
+            };
+          },
+        }}
+      >
+        {children}
+      </useOrganisationsContext.Provider>
+    );
+    const { getByText } = RTL.render(<Organizations />, {
+      wrapper: Wrapper,
+    });
+    getByText("Loading...");
+  });
 
   /**
-   * Exercise 2 (5 mins)
+   * Exercise 2 (5 mins) - out of context
    */
   it.todo("should fetch the first page when mounted");
 
   /**
-   * Exercise 3 (5 mins)
+   * Exercise 3 (5 mins) - out of context
    */
   it.todo("should display Loading when a request is in flight");
 
   /**
    * Exercise 4 (5 mins)
    */
-  it.todo("should display ErrorMessage when there is an error");
+  it("should display ErrorMessage when there is an error", () => {
+    const Wrapper: React.FC = ({ children }) => (
+      <useOrganisationsContext.Provider
+        value={{
+          useOrganisation() {
+            return {
+              _tag: "Errored",
+              reason: "Unhandled error",
+              retry: () => {},
+            };
+          },
+        }}
+      >
+        {children}
+      </useOrganisationsContext.Provider>
+    );
+    const { getByText } = RTL.render(<Organizations />, { wrapper: Wrapper });
+    getByText("Error: Unhandled error");
+  });
 
   /**
    * Exercise 5 (5 mins)
    */
-  it.todo("should display the ids of the organizations when the state is done");
+  it("should display the ids of the organizations when the state is done", () => {
+    const fakeuseOrganisation: OrganizationsState = {
+      _tag: "Done",
+      orgs: [{ login: "login1" } as Organization],
+      nextPage() {},
+    };
+    const { findAllByText } = RTL.render(
+      <useOrganisationsContext.Provider
+        value={{ useOrganisation: () => fakeuseOrganisation }}
+      >
+        <Organizations />
+      </useOrganisationsContext.Provider>
+    );
+    findAllByText(/login1/i);
+  });
 
   /**
    * Exercise 6 (5 mins)
    */
-  it.todo("should display the next page button only if the state is done");
+  it("should display the next page button only if the state is done", () => {
+    const fakeuseOrganisation: OrganizationsState = {
+      _tag: "Done",
+      orgs: [],
+      nextPage() {},
+    };
+    const { findAllByText } = RTL.render(
+      <useOrganisationsContext.Provider
+        value={{ useOrganisation: () => fakeuseOrganisation }}
+      >
+        <Organizations />
+      </useOrganisationsContext.Provider>
+    );
+    findAllByText(/Next/i);
+  });
 
   /**
    * Exercise 7 (5 mins)
    */
-  it.todo("should fetch the next page when the next page button is clicked");
+  it("should fetch the next page when the next page button is clicked", () => {
+    const fn = jest.fn();
+    const Wrapper: React.FC = ({ children }) => (
+      <useOrganisationsContext.Provider
+        value={{
+          useOrganisation() {
+            return {
+              _tag: "Done",
+              orgs: [
+                { id: 1, login: "Sonic" },
+                { id: 2, login: "hedgehoge" },
+              ] as Organization[],
+              nextPage: fn,
+            };
+          },
+        }}
+      >
+        {children}
+      </useOrganisationsContext.Provider>
+    );
+    const { getByText } = RTL.render(<Organizations />, {
+      wrapper: Wrapper,
+    });
+    getByText("Sonic, hedgehoge");
+    getByText("Next").click();
+    expect(fn).toBeCalledTimes(1);
+  });
 
   /**
    * Exercise 8 (5 mins)
    */
-  it.todo("should display a retry only if the state is errored");
+  it("should display a retry if the state is errored", () => {
+    const fn = jest.fn();
+    const Wrapper: React.FC = ({ children }) => (
+      <useOrganisationsContext.Provider
+        value={{
+          useOrganisation() {
+            return {
+              _tag: "Errored",
+              reason: "some reason",
+              retry: fn,
+            };
+          },
+        }}
+      >
+        {children}
+      </useOrganisationsContext.Provider>
+    );
+    const { getByText } = RTL.render(<Organizations />, {
+      wrapper: Wrapper,
+    });
+    getByText(/retry/i).click();
+    expect(fn).toBeCalledTimes(1);
+  });
 
   /**
    * Exercise 9
