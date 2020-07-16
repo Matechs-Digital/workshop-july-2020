@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "noErrorTruncation": true,
+    "target": "es5"
+  },
+  "include": ["packages/**/**/*.ts", "packages/**/**/*.tsx"],
+  "exclude": ["node_modules", "packages/**/node_modules"]
+}
