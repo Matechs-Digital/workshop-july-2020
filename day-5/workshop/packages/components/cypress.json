@@ -3,7 +3,7 @@
   "viewportWidth": 500,
   "viewportHeight": 500,
   "experimentalComponentTesting": true,
-  "componentFolder": "e2e",
+  "componentFolder": "test-e2e/specs",
   "nodeVersion": "system",
   "env": {
     "coverage": true

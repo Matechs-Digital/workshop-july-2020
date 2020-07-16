@@ -2,7 +2,7 @@ const { pathsToModuleNameMapper } = require("ts-jest/utils");
 const { compilerOptions } = require("../../tsconfig");
 
 module.exports = {
-  testPathIgnorePatterns: ["node_modules", "esm", "e2e", "cypress"],
+  testPathIgnorePatterns: ["node_modules", "esm", "test-e2e", "cypress"],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: "<rootDir>/../../",
   }),
