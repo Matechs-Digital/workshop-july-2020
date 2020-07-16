@@ -8,7 +8,7 @@ import {
   arbitraryIntegerAsString,
   arbitraryPerson,
   arbitraryPersonWithBirthDate,
-} from "./03-generative-testing";
+} from "../src/03-generative-testing";
 */
 
 describe("02-fast-check", () => {

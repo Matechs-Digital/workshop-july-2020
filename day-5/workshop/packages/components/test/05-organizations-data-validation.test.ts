@@ -1,4 +1,4 @@
-import {} from "./05-organizations-data-validation";
+import {} from "../src/05-organizations-data-validation";
 
 describe("06-organizations-data-validation", () => {
   /**

@@ -9,8 +9,8 @@ import {
   fetchOrgsContext,
   Done,
   Errored,
-} from "./01-organizations";
-import * as H from "./01-http";
+} from "../src/01-organizations";
+import * as H from "../src/01-http";
 
 afterEach(RTL.cleanup);
 afterEach(() => {

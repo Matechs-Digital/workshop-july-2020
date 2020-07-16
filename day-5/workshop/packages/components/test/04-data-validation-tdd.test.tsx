@@ -1,4 +1,4 @@
-import {} from "./04-data-validation-tdd";
+import {} from "../src/04-data-validation-tdd";
 
 describe("04-data-validation", () => {
   /**

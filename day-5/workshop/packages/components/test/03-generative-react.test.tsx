@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as RTL from "@testing-library/react";
 import fc from "fast-check";
-import { RemConverter } from "./03-generative-react";
+import { RemConverter } from "../src/03-generative-react";
 
 afterEach(RTL.cleanup);
 

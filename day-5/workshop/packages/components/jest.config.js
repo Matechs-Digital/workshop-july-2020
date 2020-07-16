@@ -6,5 +6,10 @@ module.exports = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: "<rootDir>/../../",
   }),
-  setupFilesAfterEnv: ["./jest.setup.ts"]
+  setupFilesAfterEnv: ["./jest.setup.ts"],
+  globals: {
+    'ts-jest': {
+      tsConfig: 'tsconfig.test.json'
+    }
+  }
 };

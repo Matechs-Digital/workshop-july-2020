@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as RTL from "@testing-library/react";
-import { valuesDbContext, View } from "./00-context";
+import { valuesDbContext, View } from "../src/00-context";
 
 afterEach(RTL.cleanup);
 

@@ -10,6 +10,7 @@ module.exports = {
       },
     ],
     "@babel/preset-typescript",
-    "next/babel",
+    "@babel/preset-react"
   ],
+  //plugins: ["@babel/plugin-transform-regenerator"]
 };
