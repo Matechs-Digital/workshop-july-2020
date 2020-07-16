@@ -1,0 +1,33 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "pages/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
+  ],
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@workshop/common": ["../common/esm"],
+      "@workshop/common/*": ["../common/esm/*"],
+      "@workshop/components": ["../components/esm"],
+      "@workshop/components/*": ["../components/esm/*"],
+      "@workshop/app": ["../app/src"],
+      "@workshop/app/pages": ["../app/src/pages"],
+      "@workshop/app/pages/*": ["../app/src/pages/*"],
+      "@workshop/app/*": ["../app/src/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}
