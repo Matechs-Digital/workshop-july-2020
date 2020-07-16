@@ -120,4 +120,18 @@ describe("01-go-to-google", () => {
       .type("{backspace}")
       .type("assignment-a{enter}");
   });
+
+  /**
+   * Exercise 16
+   */
+  it("should check toggle all", () => {
+    cy.get("#toggle-all").check({ force: true });
+  });
+
+  /**
+   * Exercise 17
+   */
+  it("clear all completed", () => {
+    cy.get(".clear-completed").click();
+  });
 });
