@@ -1,14 +1,12 @@
-/// <reference types="cypress" />
+// import * as React from "react";
+// import { mount } from "cypress-react-unit-test";
+// import styled from "styled-components";
 
-import * as React from "react";
-import { mount } from "cypress-react-unit-test";
-import styled from "styled-components";
-
-const StyledDiv = styled.div`
-  @media (max-width: 500px) {
-    display: none;
-  }
-`;
+// const StyledDiv = styled.div`
+//   @media (max-width: 500px) {
+//     display: none;
+//   }
+// `;
 
 describe("04-testing-styles", () => {
   /**

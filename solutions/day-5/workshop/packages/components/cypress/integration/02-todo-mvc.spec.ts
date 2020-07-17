@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 describe("01-go-to-google", () => {
   beforeEach(() => {
     cy.viewport("macbook-13");

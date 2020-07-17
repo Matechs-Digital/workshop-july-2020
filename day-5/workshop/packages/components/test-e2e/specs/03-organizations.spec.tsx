@@ -1,13 +1,11 @@
-/// <reference types="cypress" />
-
-import * as React from "react";
-import { mount } from "cypress-react-unit-test";
-import {
-  Organizations,
-  fetchOrgsContext,
-  Organization,
-} from "../../src/01-organizations";
-import * as DTL from "@testing-library/dom";
+// import * as React from "react";
+// import { mount } from "cypress-react-unit-test";
+// import {
+//   Organizations,
+//   fetchOrgsContext,
+//   Organization,
+// } from "../../src/01-organizations";
+// import * as DTL from "@testing-library/dom";
 
 /**
  * Using DOM-testing-library + mount
